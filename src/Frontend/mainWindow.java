@@ -1,5 +1,4 @@
 package Frontend;
-import java.awt.*;
 import javax.swing.*;
 
 public class mainWindow extends JFrame{

@@ -1,7 +1,15 @@
 package Backend;
+import Frontend.mainWindow;
 import com.leapmotion.leap.*;
 
 public class LeapMotionListener extends Listener {
+    mainWindow mWindow;
+
+    public LeapMotionListener(mainWindow mWindow) {
+        this.mWindow = mWindow;
+    }
+
+
     @Override
     public void onInit(Controller controller) {
         System.out.println("Initialized");
@@ -28,6 +36,10 @@ public class LeapMotionListener extends Listener {
         // Get the most recent frame and report some basic information
         Frame frame = controller.frame();
         System.out.println("new frame");
+        int fingerNum = frame.hands().count() * 5;
+        float[] x = new float[fingerNum];
+        float[] y = new float[fingerNum];
+        int index = 0;
         for (Hand hand : frame.hands()) {
             String handType = hand.isLeft() ? "Left hand" : "Right hand";
             System.out.println(handType);
@@ -36,8 +48,13 @@ public class LeapMotionListener extends Listener {
                 //Get Bones
                 Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
                 System.out.println(bone.nextJoint());
+                x[index] = bone.nextJoint().getX();
+                y[index] = bone.nextJoint().getZ();
+                index++;
             }
         }
+        mWindow.update(fingerNum, x, y, null);
+
 //        System.out.println("Frame id: " + frame.id()
 //                + ", timestamp: " + frame.timestamp()
 //                + ", hands: " + frame.hands().count()

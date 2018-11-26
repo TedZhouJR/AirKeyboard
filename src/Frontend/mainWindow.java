@@ -33,8 +33,9 @@ public class mainWindow extends JFrame{
         System.out.println("Begin update");
         for(int i = 0; i < num; i++){
             //用于float的坐标变换到电脑上的像素点坐标，目前是将400mm × 120mm大小虚拟键盘映射到小键盘上
-            Xs[i] = (int)((X[i] / 400.0) * 1000);
-            Ys[i] = (int)((Y[i] / 120.0) * 300);
+            // 然后将坐标中心从键盘中间平移到左上角，以正常显示
+            Xs[i] = (int)(((X[i] + 200.0) / 400.0) * 1000);
+            Ys[i] = (int)(((Y[i] + 60.0) / 120.0) * 300);
         }
         glassPanel.update(num, Xs, Ys);
         glassPanel.repaint();

@@ -6,7 +6,9 @@ class Key extends JLabel{
     private String strKeyNum;
     Key(String key){
         strKeyNum = key;
+        this.setBackground(Color.CYAN);
         this.setOpaque(true);
+        this.setText(strKeyNum);
     }
 
     void beClicked(){

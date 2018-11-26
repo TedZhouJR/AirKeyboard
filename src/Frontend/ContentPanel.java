@@ -32,8 +32,10 @@ public class ContentPanel extends JComponent {
         for (int i = 0; i < fingerNum; i++){
             int x = fingerLocation.get(i).getX();
             int y = fingerLocation.get(i).getY();
-            g.fillOval(x - 8, y - 8, 16, 16);
-            //System.out.printf("(%d, %d)\n", x, y);
+            if(y >= 300) {
+                g.fillOval(x - 8, y - 8, 16, 16);
+                //System.out.printf("(%d, %d)\n", x, y);
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args){
         mainWindow mainwindow = new mainWindow("Air Key Board");
-        /*int num = 10;             //DEBUG
+        int num = 10;             //DEBUG
         float [] Xs = new float[10];
         float [] Ys = new float[10];
         while(true){
@@ -24,9 +24,9 @@ public class Main {
                 Xs[i] = console.nextFloat();
                 Ys[i] = console.nextFloat();
             }
-            mainwindow.update(num, Xs, Ys, null);
-        }*/
-
+            mainwindow.update(num, Xs, Ys, new boolean[10], null);
+        }
+        /*
         // Create a sample listener and controller
         LeapMotionListener listener = new LeapMotionListener(mainwindow);
         Controller controller = new Controller();
@@ -43,7 +43,7 @@ public class Main {
         }
 
         // Remove the sample listener when done
-        controller.removeListener(listener);
+        controller.removeListener(listener);*/
     }
 
 }

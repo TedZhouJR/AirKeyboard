@@ -7,6 +7,7 @@ import java.util.Vector;
 public class ContentPanel extends JComponent {
     private int fingerNum;
     private Vector<Location> fingerLocation;
+    private boolean[] push;
 
     ContentPanel(){
         super();
@@ -15,24 +16,31 @@ public class ContentPanel extends JComponent {
         for (int i = 0; i < 10; i++){
             fingerLocation.add(new Location(0, 0));
         }
+        push = new boolean[10];
     }
 
-    void update(int num, int[] Xs, int[] Ys){
+    void update(int num, int[] Xs, int[] Ys, boolean[] push){
         //System.out.println("Glass update");
         fingerNum = num;
         for (int i = 0; i < num; i++){
             fingerLocation.get(i).setLocation(Xs[i], Ys[i] + 300);
+            this.push[i] = push[i];
         }
     }
 
     @Override
     public void paint(Graphics g){
         //System.out.println("Paint");
-        g.setColor(Color.RED);
         for (int i = 0; i < fingerNum; i++){
             int x = fingerLocation.get(i).getX();
             int y = fingerLocation.get(i).getY();
             if(y >= 300) {
+                if(!push[i]) {
+                    g.setColor(Color.RED);
+                }
+                else {
+                    g.setColor(Color.YELLOW);
+                }
                 g.fillOval(x - 8, y - 8, 16, 16);
                 //System.out.printf("(%d, %d)\n", x, y);
             }

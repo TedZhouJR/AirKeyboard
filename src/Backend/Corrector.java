@@ -10,7 +10,6 @@ public class Corrector {
 	private Map<String, Double> collection1 = new HashMap<String, Double>();
 	private Map<String, Double> collection2 = new HashMap<String, Double>();
 	private Map<Double, String> result = new HashMap<Double, String>();
-	private List<String> list = new ArrayList<>();
 	public Corrector() {
 		try {
 			FileInputStream f=new FileInputStream("dst.txt");
@@ -108,37 +107,52 @@ public class Corrector {
 	}
 
 	// 程序入口
-	public List<String> dealWith(String arg[], mainWindow mwin) {
-		if (mwin.inputWord.length() < 2) {
-			list.add(mwin.inputWord);
-			return list;
-		} else {
-			list.clear();
+	public void dealWith(Map<String, Double> arg, mainWindow mwin) {
+		if (mwin.inputWord.length() < 1) {
+			String x = "";
+			double v = 0;
+			for (Map.Entry<String, Double> entry : arg.entrySet()) {
+				if (x.equalsIgnoreCase("")) {
+					x = entry.getKey();
+					v = entry.getValue();
+				} else {
+					if (v < entry.getValue()) {
+						x = entry.getKey();
+						v = entry.getValue();
+					}
+				}
+			}
+			String[] a = new String[1];
+			a[0] = "";
+			//System.out.println(x + " NULL");
+			mwin.pushKey(x, a);
+			return;
 		}
 		String xc = mwin.prefixWord.toLowerCase();
 		int i = 0;
-		while (i < arg.length) {
-			String word = mwin.inputWord.toLowerCase()+arg[i].toLowerCase();
+		for (Map.Entry<String, Double> entry : arg.entrySet()) {
+			String word = mwin.inputWord.toLowerCase()+entry.getKey().toLowerCase();
 			buildOc(word, collection1);
 			buildTc();
 			searchCollection(xc);
 			collection1.clear();
 			collection2.clear();
-			i++;
 		}
 		Set <Double> keys= result.keySet();
 		List<Double> lists = new ArrayList<Double>(keys);
 		Collections.sort(lists);
 		int io = 0;
+		String[] res = new String[lists.size()];
 		for (int kk=lists.size()-1;kk>=0; kk--) {
 			if (io == 9) {
 				break;
 			}
-			list.add(result.get(lists.get(kk)));
-			//System.out.println(result.get(lists.get(kk)));
+			res[io] = result.get(lists.get(kk));
+			System.out.println(result.get(lists.get(kk)));
 			io++;
 		}
 		result.clear();
-		return list;
+		//System.out.println(res[0].substring(res[0].length()-1) + " "+res);
+		mwin.pushKey(res[0].substring(res[0].length()-1), res);
 	}
 }

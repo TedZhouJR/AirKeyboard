@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class KeyPanel extends JPanel {
     private Key[] keys;
-    private Key pushedKey;
     public static final String[] keynum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
                                           "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
                                           "A", "S", "D", "F", "G", "H", "J", "K", "L",
@@ -34,7 +33,7 @@ public class KeyPanel extends JPanel {
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.LINE_AXIS));
         bottom.setPreferredSize(panelDimension);
-        Dimension rigidBetweenPanel = new Dimension(0, 5);    //纵向的间隔宽度10像素
+        Dimension rigidBetweenPanel = new Dimension(0, 5);    //纵向的间隔宽度5像素
         this.add(numPanel);
         this.add(Box.createRigidArea(rigidBetweenPanel));
         this.add(top);
@@ -42,7 +41,6 @@ public class KeyPanel extends JPanel {
         this.add(middle);
         this.add(Box.createRigidArea(rigidBetweenPanel));
         this.add(bottom);
-        pushedKey = null;
         keys = new Key[37];
         Dimension keyDimension = new Dimension(80, 80);       // 键盘大小 80 × 80
         Dimension rigidBoxDimension = new Dimension(5, 0);    // 键盘之间横向间隔 5像素

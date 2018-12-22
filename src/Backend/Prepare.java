@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 
 public class Prepare {
+	// �洢���ʺͶ�Ӧ��Ƶ
 	public static Map<String, Integer> map=new HashMap<String, Integer>();   
-	public static void dealwith(String filename) {
+	// �����ı���ȡ�����ʲ������Ƶ�����浽map
+	public static void dealWith(String filename) {
 	    try {
 	    	BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filename)), "UTF-8"));
 	    	String linetxt = null;
@@ -28,19 +30,21 @@ public class Prepare {
             }
 	    	in.close();
 	    } catch (Exception e) {
+	    	System.out.println("Dealwith Error!");
 	    	e.printStackTrace();
 	    }
 	}
-	
+	// �������
 	public static void main(String[] args) {
-		dealwith("src2.txt");
-		dealwith("src1.txt");
+		dealWith("src2.txt");
+		dealWith("src1.txt");
 		try {
 			FileOutputStream fos=new FileOutputStream("MyTest.txt");
 	        ObjectOutputStream objectOutputStream=new ObjectOutputStream(fos);
 	        objectOutputStream.writeObject(map);
 	        objectOutputStream.close();
 		} catch (Exception e) {
+			System.out.println("Prepare Error!");
 			e.printStackTrace();
 		}
 	}

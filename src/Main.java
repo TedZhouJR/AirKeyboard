@@ -1,3 +1,4 @@
+import Backend.Corrector;
 import Backend.LeapMotionListener;
 import Frontend.mainWindow;
 import com.leapmotion.leap.Controller;
@@ -5,6 +6,8 @@ import com.leapmotion.leap.Controller;
 import java.io.IOException;
 
 import java.io.Console;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 

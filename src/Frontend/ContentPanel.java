@@ -23,7 +23,7 @@ public class ContentPanel extends JComponent {
         //System.out.println("Glass update");
         fingerNum = num;
         for (int i = 0; i < num; i++){
-            fingerLocation.get(i).setLocation(Xs[i], Ys[i] + 300);
+            fingerLocation.get(i).setLocation(Xs[i], Ys[i] + 350);
             this.push[i] = push[i];
         }
     }

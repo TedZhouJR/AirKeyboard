@@ -34,7 +34,7 @@ public class KeyPanel extends JPanel {
         JPanel bottom = new JPanel();
         bottom.setLayout(new BoxLayout(bottom, BoxLayout.LINE_AXIS));
         bottom.setPreferredSize(panelDimension);
-        Dimension rigidBetweenPanel = new Dimension(0, 5);    //纵向的间隔宽度10像素
+        Dimension rigidBetweenPanel = new Dimension(0, 5);    //纵向的间隔宽度5像素
         this.add(numPanel);
         this.add(Box.createRigidArea(rigidBetweenPanel));
         this.add(top);
@@ -87,5 +87,17 @@ public class KeyPanel extends JPanel {
         keys[36].setFont(new Font("Times New Roman", Font.PLAIN, 18));
         numPanel.add(Box.createRigidArea(rigidBoxDimension));
         numPanel.add(keys[36]);
+    }
+
+    void pushKey(String target){
+        for(int i = 0; i < 37; i++){
+            keys[i].checkPush(target);
+        }
+    }
+
+    void releaseKey(String target){
+        for(int i = 0; i < 37; i++){
+            keys[i].checkRelease(target);
+        }
     }
 }

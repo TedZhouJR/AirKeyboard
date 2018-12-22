@@ -25,8 +25,10 @@ public class Prepare {
 						if (t != "" && x != "") {
 							if (map2.get(t + " "+ x) == null) {
 								map2.put(t + " "+ x, 1);
+								map2.put("map2", map2.get("map2")+1);
 							} else {
 								map2.put(t + " "+ x, map2.get(t + " "+ x)+1);
+								map2.put("map2", map2.get("map2")+1);
 							}
 							//System.out.println("t = " + t + " " + "m = " + x);
 						}
@@ -35,9 +37,11 @@ public class Prepare {
 	    			if (map.get(x) == null) {
 	    				t = x;
 	    				map.put(x, 1);
+						map.put("map1", map.get("map1")+1);
 	    			} else {
 						t = x;
 	    				map.put(x, map.get(x)+1);
+						map.put("map1", map.get("map1")+1);
 	    			}
 	    		}
             }
@@ -49,6 +53,8 @@ public class Prepare {
 	}
 
 	public static void main(String[] args) {
+		map.put("map1",0);
+		map2.put("map2",0);
 		dealWith("src2.txt");
 		dealWith("src1.txt");
 		try {

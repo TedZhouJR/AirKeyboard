@@ -1,30 +1,43 @@
+package Backend;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 
 public class Prepare {
-	// �洢���ʺͶ�Ӧ��Ƶ
-	public static Map<String, Integer> map=new HashMap<String, Integer>();   
-	// �����ı���ȡ�����ʲ������Ƶ�����浽map
+	public static Map<String, Integer> map=new HashMap<String, Integer>();
+	public static Map<String, Integer> map2=new HashMap<String, Integer>();
+	// 得到单词词频
 	public static void dealWith(String filename) {
 	    try {
 	    	BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(new File(filename)), "UTF-8"));
 	    	String linetxt = null;
 	    	String pattern = "[A-Za-z]+";
 	    	Pattern r = Pattern.compile(pattern);
+	    	int i = 0;
 	    	while ((linetxt = in.readLine()) != null) {
 	    		Matcher m = r.matcher(linetxt);
+	    		i = 0;
+	    		String t = "";
 	    		while(m.find()) {
-	    			if (map.get(m.group().toLowerCase()) == null) {
-	    				map.put(m.group().toLowerCase(), 1);
+					String x = m.group().toLowerCase();
+					if (i != 0){
+						if (t != "" && x != "") {
+							if (map2.get(t + " "+ x) == null) {
+								map2.put(t + " "+ x, 1);
+							} else {
+								map2.put(t + " "+ x, map2.get(t + " "+ x)+1);
+							}
+							//System.out.println("t = " + t + " " + "m = " + x);
+						}
+					}
+					i++;
+	    			if (map.get(x) == null) {
+	    				t = x;
+	    				map.put(x, 1);
 	    			} else {
-	    				map.put(m.group().toLowerCase(), map.get(m.group().toLowerCase())+1);
+						t = x;
+	    				map.put(x, map.get(x)+1);
 	    			}
 	    		}
             }
@@ -34,15 +47,24 @@ public class Prepare {
 	    	e.printStackTrace();
 	    }
 	}
-	// �������
+
 	public static void main(String[] args) {
 		dealWith("src2.txt");
 		dealWith("src1.txt");
 		try {
-			FileOutputStream fos=new FileOutputStream("MyTest.txt");
+			FileOutputStream fos=new FileOutputStream("dst.txt");
 	        ObjectOutputStream objectOutputStream=new ObjectOutputStream(fos);
 	        objectOutputStream.writeObject(map);
 	        objectOutputStream.close();
+		} catch (Exception e) {
+			System.out.println("Prepare Error!");
+			e.printStackTrace();
+		}
+		try {
+			FileOutputStream fos2=new FileOutputStream("dst2.txt");
+			ObjectOutputStream objectOutputStream2=new ObjectOutputStream(fos2);
+			objectOutputStream2.writeObject(map2);
+			objectOutputStream2.close();
 		} catch (Exception e) {
 			System.out.println("Prepare Error!");
 			e.printStackTrace();

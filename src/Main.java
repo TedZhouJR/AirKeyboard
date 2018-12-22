@@ -4,14 +4,29 @@ import com.leapmotion.leap.Controller;
 
 import java.io.IOException;
 
+import java.io.Console;
+import java.util.Scanner;
+
 
 public class Main {
 
     public static void main(String[] args){
         mainWindow mainwindow = new mainWindow("Air Key Board");
+//        mainwindow.showCenter();
+//        int num = 10;             //DEBUG
+//        String key = null;
+//        Scanner console = new Scanner(System.in);
+//        while(true){
+//            System.out.println("Please input push key");
+//            key = console.next();
+//            mainwindow.pushKey(key);
+//            System.out.println("Please input release key");
+//            key = console.next();
+//            mainwindow.releaseKey(key);
+//        }
 
         // Create a sample listener and controller
-        LeapMotionListener listener = new LeapMotionListener();
+        LeapMotionListener listener = new LeapMotionListener(mainwindow);
         Controller controller = new Controller();
 
         // Have the sample listener receive events from the controller
@@ -28,4 +43,5 @@ public class Main {
         // Remove the sample listener when done
         controller.removeListener(listener);
     }
+
 }

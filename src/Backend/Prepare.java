@@ -5,8 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Prepare {
-	public static Map<String, Integer> map=new HashMap<String, Integer>();
-	public static Map<String, Integer> map2=new HashMap<String, Integer>();
+	public static Map<String, Double> map=new HashMap<String, Double>();
+	public static Map<String, Double> map2=new HashMap<String, Double>();
 	// 得到单词词频
 	public static void dealWith(String filename) {
 	    try {
@@ -24,11 +24,11 @@ public class Prepare {
 					if (i != 0){
 						if (t != "" && x != "") {
 							if (map2.get(t + " "+ x) == null) {
-								map2.put(t + " "+ x, 1);
-								map2.put("map2", map2.get("map2")+1);
+								map2.put(t + " "+ x, 1.0);
+								map2.put("map2", map2.get("map2")+1.0);
 							} else {
-								map2.put(t + " "+ x, map2.get(t + " "+ x)+1);
-								map2.put("map2", map2.get("map2")+1);
+								map2.put(t + " "+ x, map2.get(t + " "+ x)+1.0);
+								map2.put("map2", map2.get("map2")+1.0);
 							}
 							//System.out.println("t = " + t + " " + "m = " + x);
 						}
@@ -36,12 +36,12 @@ public class Prepare {
 					i++;
 	    			if (map.get(x) == null) {
 	    				t = x;
-	    				map.put(x, 1);
-						map.put("map1", map.get("map1")+1);
+	    				map.put(x, 1.0);
+						map.put("map1", map.get("map1")+1.0);
 	    			} else {
 						t = x;
 	    				map.put(x, map.get(x)+1);
-						map.put("map1", map.get("map1")+1);
+						map.put("map1", map.get("map1")+1.0);
 	    			}
 	    		}
             }
@@ -53,8 +53,8 @@ public class Prepare {
 	}
 
 	public static void main(String[] args) {
-		map.put("map1",0);
-		map2.put("map2",0);
+		map.put("map1",0.0);
+		map2.put("map2",0.0);
 		dealWith("src2.txt");
 		dealWith("src1.txt");
 		try {

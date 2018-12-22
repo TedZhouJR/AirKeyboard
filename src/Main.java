@@ -1,3 +1,4 @@
+import Backend.Corrector;
 import Backend.LeapMotionListener;
 import Frontend.mainWindow;
 import com.leapmotion.leap.Controller;
@@ -5,13 +6,26 @@ import com.leapmotion.leap.Controller;
 import java.io.IOException;
 
 import java.io.Console;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class Main {
 
     public static void main(String[] args){
-        mainWindow mainwindow = new mainWindow("Air Key Board");
+        String a[] = new String[4];
+        a[0] = "worc";
+        a[1] = "word";
+        a[2] = "worr";
+        a[3] = "worf";
+        Corrector corrector = new Corrector();
+        List<String> list = new ArrayList<>();
+        list = corrector.dealWith(a);
+        for (int kk=0;kk<list.size(); kk++) {
+            System.out.println(list.get(kk));
+        }
+        /*mainWindow mainwindow = new mainWindow("Air Key Board");
 //        mainwindow.showCenter();
 //        int num = 10;             //DEBUG
 //        String key = null;
@@ -41,7 +55,7 @@ public class Main {
         }
 
         // Remove the sample listener when done
-        controller.removeListener(listener);
+        controller.removeListener(listener);*/
     }
 
 }

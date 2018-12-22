@@ -8,6 +8,7 @@ import java.util.Map;
 import java.lang.Math;
 
 public class LeapMotionListener extends Listener {
+    private static int MAX_FINGER_ID = 999;
     mainWindow mWindow;
     Corrector corrector;
     Hand mLastLeftHand;
@@ -17,8 +18,11 @@ public class LeapMotionListener extends Listener {
     Map<Integer, Float> mFingerMap;
     Map<Integer, Boolean> mFingerStatus;
     Map<Integer, Vector> mFingerPos;
+//    private int[] descendingList = new int[MAX_FINGER_ID], risingList = new int[MAX_FINGER_ID];
     private int descending = 0, rising = 0;
     private int MAX_DESCEND = 5, MAX_RISE = 4;
+//    private int[] latestFingerIDList = new int[MAX_FINGER_ID];
+//    private int latestFingerInList = -1;
     Frame mLastFrame;
     long mLastFrameId;
 
@@ -94,8 +98,24 @@ public class LeapMotionListener extends Listener {
         int index = 0;
 
         for (Finger finger : frame.fingers()) {
-//            System.out.println(finger.type() == Finger.Type.TYPE_INDEX);
+//            int fingerIndex = 0;
             if (finger.type() == Finger.Type.TYPE_INDEX) {
+//                if (latestFingerInList == -1) {
+//                    latestFingerInList = 0;
+//                    latestFingerIDList[0] = finger.id();
+//                    risingList[0] = descendingList[0] = 0;
+//                } else {
+//                    for (fingerIndex = 0; fingerIndex <= latestFingerInList; fingerIndex++) {
+//                        if (latestFingerIDList[fingerIndex] == finger.id()) {
+//                            break;
+//                        }
+//                    }
+//                    if (fingerIndex > latestFingerInList) {
+//                        latestFingerInList++;
+//                        latestFingerIDList[fingerIndex] = finger.id();
+//                        risingList[fingerIndex] = descendingList[fingerIndex] = 0;
+//                    }
+//                }
                 Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
                 x[index] = bone.nextJoint().getX();
                 y[index] = bone.nextJoint().getZ();

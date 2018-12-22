@@ -37,8 +37,8 @@ public class mainWindow extends JFrame{
         this.pack();
         setVisible(true);
         this.setResizable(false);
-        prefixWord = null;
-        inputWord = null;
+        prefixWord = "";
+        inputWord = "";
         // setSize(1000, 780);   // 30为最上面一行的大小
         setVisible(true);
     }

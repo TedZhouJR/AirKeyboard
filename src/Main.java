@@ -17,15 +17,18 @@ public class Main {
         mainWindow mainwindow = new mainWindow("Air Key Board");
 //        mainwindow.showCenter();
 //        int num = 10;             //DEBUG
-//        String key = null;
-//        Scanner console = new Scanner(System.in);
+//        float [] Xs = new float[10];
+//        float [] Ys = new float[10];
 //        while(true){
-//            System.out.println("Please input push key");
-//            key = console.next();
-//            mainwindow.pushKey(key);
-//            System.out.println("Please input release key");
-//            key = console.next();
-//            mainwindow.releaseKey(key);
+//            System.out.println("Please input num");
+//            Scanner console = new Scanner(System.in);
+//            num = console.nextInt();
+//            System.out.println("Please input location");
+//            for (int i = 0; i < num; i++){
+//                Xs[i] = console.nextFloat();
+//                Ys[i] = console.nextFloat();
+//            }
+//            mainwindow.update(num, Xs, Ys, new boolean[10], null);
 //        }
 
         // Create a sample listener and controller

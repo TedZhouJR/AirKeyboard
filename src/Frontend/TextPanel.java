@@ -32,4 +32,17 @@ class TextPanel extends JPanel {
             area.setCaretPosition(area.getText().length());
         }
     }
+
+    String getText(){
+        return area.getText();
+    }
+
+    void changeLastWord(String word, String lastWord){
+        String text = area.getText();
+        int wordLen = lastWord.length();
+        int textLen = text.length();
+        text = text.substring(0, textLen - wordLen) + word + " ";
+        area.setText(text);
+        area.setCaretPosition(area.getText().length());
+    }
 }

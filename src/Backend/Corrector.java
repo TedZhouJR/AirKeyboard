@@ -12,7 +12,26 @@ public class Corrector {
 	private Map<Double, String> result = new HashMap<Double, String>();
 	private List<String> list = new ArrayList<>();
 	public Corrector() {
-		
+		try {
+			FileInputStream f=new FileInputStream("dst.txt");
+			ObjectInputStream ob=new ObjectInputStream(f);
+			temp = (Map<String, Double>) ob.readObject();
+			//System.out.println(temp.get("you"));
+			ob.close();
+		} catch (Exception e) {
+			System.out.println("Corrector Error!");
+			e.printStackTrace();
+		}
+		try {
+			FileInputStream f2=new FileInputStream("dst2.txt");
+			ObjectInputStream ob2=new ObjectInputStream(f2);
+			temp2 = (Map<String, Double>) ob2.readObject();
+			//System.out.println(temp.get("you"));
+			ob2.close();
+		} catch (Exception e) {
+			System.out.println("Corrector Error!");
+			e.printStackTrace();
+		}
 	};
 	// 构建编辑距离为1 的集合
 	private void buildOc(String word, Map<String, Double> collection) {
@@ -76,40 +95,30 @@ public class Corrector {
 		}
 		for (Map.Entry<String, Double> entry : current.entrySet()) {
 			x = entry.getKey();
-			if (temp2.get(pre + " " + x) != null) {
-				result.put((entry.getValue() / temp.get("map1")) * (temp2.get(pre + " " + x)/ temp2.get("map2")), x);
+			if (!pre.equalsIgnoreCase("")) {
+				if (temp2.get(pre + " " + x) != null) {
+					result.put((entry.getValue() / temp.get("map1")) * (temp2.get(pre + " " + x) / temp2.get("map2")), x);
+				} else {
+					result.put((entry.getValue() / temp.get("map1")) * (0.1 / temp2.get("map2")), x);
+				}
 			} else {
-				result.put((entry.getValue() / temp.get("map1")) * (0.1 / temp2.get("map2")), x);
+				result.put(entry.getValue() / temp.get("map1"), x);
 			}
 		}
 	}
 
 	// 程序入口
 	public List<String> dealWith(String arg[], mainWindow mwin) {
-		try {
-			FileInputStream f=new FileInputStream("dst.txt");
-	        ObjectInputStream ob=new ObjectInputStream(f);
-	        temp = (Map<String, Double>) ob.readObject();
-	        //System.out.println(temp.get("you"));
-	        ob.close();
-		} catch (Exception e) {
-			System.out.println("Corrector Error!");
-			e.printStackTrace();
+		if (mwin.inputWord.length() < 2) {
+			list.add(mwin.inputWord);
+			return list;
+		} else {
+			list.clear();
 		}
-		try {
-			FileInputStream f2=new FileInputStream("dst2.txt");
-			ObjectInputStream ob2=new ObjectInputStream(f2);
-			temp2 = (Map<String, Double>) ob2.readObject();
-			//System.out.println(temp.get("you"));
-			ob2.close();
-		} catch (Exception e) {
-			System.out.println("Corrector Error!");
-			e.printStackTrace();
-		}
-		String xc = mwin.prefixWord;
+		String xc = mwin.prefixWord.toLowerCase();
 		int i = 0;
 		while (i < arg.length) {
-			String word = mwin.inputWord+arg[i];
+			String word = mwin.inputWord.toLowerCase()+arg[i].toLowerCase();
 			buildOc(word, collection1);
 			buildTc();
 			searchCollection(xc);
@@ -129,6 +138,7 @@ public class Corrector {
 			//System.out.println(result.get(lists.get(kk)));
 			io++;
 		}
+		result.clear();
 		return list;
 	}
 }

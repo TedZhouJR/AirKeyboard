@@ -5,7 +5,8 @@ import java.awt.*;
 
 public class KeyPanel extends JPanel {
     private Key[] keys;
-    private static final String[] keynum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+    private Key pushedKey;
+    public static final String[] keynum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
                                           "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
                                           "A", "S", "D", "F", "G", "H", "J", "K", "L",
                                           "Z", "X", "C", "V", "B", "N", "M", "Backspace"};
@@ -41,6 +42,7 @@ public class KeyPanel extends JPanel {
         this.add(middle);
         this.add(Box.createRigidArea(rigidBetweenPanel));
         this.add(bottom);
+        pushedKey = null;
         keys = new Key[37];
         Dimension keyDimension = new Dimension(80, 80);       // 键盘大小 80 × 80
         Dimension rigidBoxDimension = new Dimension(5, 0);    // 键盘之间横向间隔 5像素
@@ -86,5 +88,17 @@ public class KeyPanel extends JPanel {
         keys[36].setFont(new Font("Times New Roman", Font.PLAIN, 18));
         numPanel.add(Box.createRigidArea(rigidBoxDimension));
         numPanel.add(keys[36]);
+    }
+
+    void pushKey(String target){
+        for(int i = 0; i < 37; i++){
+            keys[i].checkPush(target);
+        }
+    }
+
+    void releaseKey(String target){
+        for(int i = 0; i < 37; i++){
+            keys[i].checkRelease(target);
+        }
     }
 }

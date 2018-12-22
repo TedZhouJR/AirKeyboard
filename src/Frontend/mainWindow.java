@@ -42,6 +42,22 @@ public class mainWindow extends JFrame{
         glassPanel.repaint();
     }
 
+    public void pushKey(String target){
+        keyPanel.pushKey(target.toUpperCase());
+        if(!target.toUpperCase().equals(KeyPanel.keynum[36].toUpperCase())) {
+            textPanel.inputKey(target.toLowerCase());
+            // TODO: 如何轮回的显示输入字符，即一个键被一直按下之后应该怎样不间断输出。
+        }
+        else {
+            // BackSpace operation
+            textPanel.backSpace();
+        }
+    }
+
+    public void releaseKey(String target){
+        keyPanel.releaseKey(target.toUpperCase());
+    }
+
     public void showCenter(){
         int[] centerX = new int[37];
         int[] centerY = new int[37];

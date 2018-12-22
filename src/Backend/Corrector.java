@@ -138,6 +138,7 @@ public class Corrector {
 			//System.out.println(result.get(lists.get(kk)));
 			io++;
 		}
+		result.clear();
 		return list;
 	}
 }

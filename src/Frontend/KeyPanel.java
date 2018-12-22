@@ -9,6 +9,14 @@ public class KeyPanel extends JPanel {
                                           "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
                                           "A", "S", "D", "F", "G", "H", "J", "K", "L",
                                           "Z", "X", "C", "V", "B", "N", "M", "Backspace"};
+    public static final float[] keyY = {40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+                                        125, 125, 125, 125, 125, 125, 125, 125, 125, 125,
+                                        210, 210, 210, 210, 210, 210, 210, 210, 210,
+                                        295, 295, 295, 295, 295, 295, 295, 40};
+    public static final float[] keyX = {55, 140, 225, 310, 395, 480, 565, 650, 735, 820,
+                                        117, 202, 287, 372, 457, 542, 627, 712, 797, 882,
+                                        160, 245, 330, 415, 500, 585, 670, 755, 840,
+                                        245, 330, 415, 500, 585, 670, 755, 925};
     KeyPanel(){
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));

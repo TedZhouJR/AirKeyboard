@@ -12,11 +12,11 @@ public class ContentPanel extends JComponent {
     ContentPanel(){
         super();
         fingerNum = 0;
-        fingerLocation = new Vector<>(10);
-        for (int i = 0; i < 10; i++){
+        fingerLocation = new Vector<>(37);   // show center DEBUG
+        for (int i = 0; i < 37; i++){
             fingerLocation.add(new Location(0, 0));
         }
-        push = new boolean[10];
+        push = new boolean[37];                          // show center DEBUG
     }
 
     void update(int num, int[] Xs, int[] Ys, boolean[] push){
@@ -42,7 +42,7 @@ public class ContentPanel extends JComponent {
                     g.setColor(Color.YELLOW);
                 }
                 g.fillOval(x - 8, y - 8, 16, 16);
-                //System.out.printf("(%d, %d)\n", x, y);
+                // System.out.printf("(%d, %d)\n", x, y);
             }
         }
     }

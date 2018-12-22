@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args){
         mainWindow mainwindow = new mainWindow("Air Key Board");
+//        mainwindow.showCenter();
 //        int num = 10;             //DEBUG
 //        float [] Xs = new float[10];
 //        float [] Ys = new float[10];

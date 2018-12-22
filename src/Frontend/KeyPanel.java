@@ -5,10 +5,11 @@ import java.awt.*;
 
 public class KeyPanel extends JPanel {
     private Key[] keys;
-    private static final String[] keynum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
+    public static final String[] keynum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
                                           "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
                                           "A", "S", "D", "F", "G", "H", "J", "K", "L",
                                           "Z", "X", "C", "V", "B", "N", "M", "Backspace"};
+    //1000*400
     public static final float[] keyY = {40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
                                         125, 125, 125, 125, 125, 125, 125, 125, 125, 125,
                                         210, 210, 210, 210, 210, 210, 210, 210, 210,

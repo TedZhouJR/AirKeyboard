@@ -1,5 +1,6 @@
 package Backend;
 import Frontend.mainWindow;
+import Frontend.KeyPanel;
 import com.leapmotion.leap.*;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.lang.Math;
 
 public class LeapMotionListener extends Listener {
     mainWindow mWindow;
+    Corrector corrector;
     Hand mLastLeftHand;
     Hand mLastRightHand;
     Hand mCurrentLeftHand;
@@ -28,7 +30,7 @@ public class LeapMotionListener extends Listener {
 
     @Override
     public void onInit(Controller controller) {
-        System.out.println("Initialized");
+        System.out.println("Initialized");;
         // use head mounted display
 //        controller.setPolicy(Controller.PolicyFlag.POLICY_OPTIMIZE_HMD);
     }
@@ -49,6 +51,32 @@ public class LeapMotionListener extends Listener {
         System.out.println("Exited");
     }
 
+    private String[] calNearestNine(int pressX, int pressY) {   //返回距离最近的九个字母按键
+        String[] nearestNine = {"","","","","","","","",""};
+        float[] distance = new float[9];
+        float tmp_distance;
+        for (int i = 10; i < KeyPanel.keynum.length - 1; i++) { //不遍历数字和退格
+            tmp_distance = (KeyPanel.keyX[i] - pressX) * (KeyPanel.keyX[i] - pressX) + (KeyPanel.keyY[i] - pressY) * (KeyPanel.keyY[i] - pressY);
+            for (int j = 0; j < 9; j++) {
+                if (tmp_distance < distance[j] || distance[j] == 0) {   //如果找到一个新的近的
+                    for (int k = 8; k > j; k--) {   //安排好后面的数据
+                        nearestNine[k] = nearestNine[k - 1];
+                        distance[k] = distance[k - 1];
+                    }
+                    //再插进新的
+                    nearestNine[j] = KeyPanel.keynum[i];
+                    distance[j] = tmp_distance;
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            System.out.print(nearestNine[i] + " distance is " + distance[i] + ", ");
+        }
+        System.out.println();
+        return null;
+    }
+
     @Override
     public void onFrame(Controller controller) {
         // Get the most recent frame and report some basic information
@@ -60,6 +88,7 @@ public class LeapMotionListener extends Listener {
         boolean[] push = new boolean[fingerNum];
         int index = 0;
 
+        calNearestNine(400,200);
         for (Finger finger : frame.fingers()) {
             Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
             x[index] = bone.nextJoint().getX();
@@ -90,6 +119,8 @@ public class LeapMotionListener extends Listener {
                         mFingerMap.put(finger.id(), bone.nextJoint().getY()); // 此位置需要固定
                         mFingerPos.put(finger.id(), bone.nextJoint());
                         System.out.println("click!");
+//                        String[] pressed = new String[10];
+//                        corrector.dealWith(pressed);
                     }
                 }
             } else {
@@ -101,6 +132,9 @@ public class LeapMotionListener extends Listener {
             index++;
         }
 
+        fingerNum = 1;
+        x[0] = 0;
+        y[0] = 0;
         mWindow.update(fingerNum, x, y, push, null);
 
         // 去除map中不合法id

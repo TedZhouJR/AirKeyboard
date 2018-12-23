@@ -2,7 +2,9 @@ package Backend;
 import Frontend.mainWindow;
 import Frontend.KeyPanel;
 import com.leapmotion.leap.*;
+import com.leapmotion.leap.Frame;
 
+import java.awt.*;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +28,8 @@ public class LeapMotionListener extends Listener {
     private static final double VERTICAL_MOVING_RATE = 0.4;
     private int[] latestFingerIDList = new int[MAX_FINGER_ID];
     private int latestFingerInList = -1;
+    private String recentClick = "";
+    private String[] numberList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
     Frame mLastFrame;
     long mLastFrameId;
 
@@ -67,7 +71,7 @@ public class LeapMotionListener extends Listener {
         Map<String, Double> prob_dict = new HashMap<>();
         float[] distance = new float[9];
         float tmp_distance;
-        for (int i = 10; i < KeyPanel.keynum.length - 1; i++) { //不遍历数字和退格
+        for (int i = 0; i < KeyPanel.keynum.length - 1; i++) { //不遍历数字和退格
             tmp_distance = (KeyPanel.keyX[i] - pressX) * (KeyPanel.keyX[i] - pressX) + (KeyPanel.keyY[i] - pressY) * (KeyPanel.keyY[i] - pressY);
             for (int j = 0; j < 9; j++) {
                 if (tmp_distance < distance[j] || distance[j] == 0) {   //如果找到一个新的近的
@@ -80,6 +84,13 @@ public class LeapMotionListener extends Listener {
                     distance[j] = tmp_distance;
                     break;
                 }
+            }
+        }
+        recentClick = nearestNine[0];
+        for (String number:numberList) {
+            if (nearestNine[0].equals(number)) {
+                mWindow.pushKey(nearestNine[0], null);
+                return;
             }
         }
         System.out.println();
@@ -150,6 +161,7 @@ public class LeapMotionListener extends Listener {
                                 mFingerMap.put(finger.id(), bone.nextJoint().getY());
                                 mFingerPos.put(finger.id(), bone.nextJoint());
                                 risingList[fingerIndex] = 0;
+                                mWindow.releaseKey(recentClick);
                             }
                         } else {
                             risingList[fingerIndex] = 0;

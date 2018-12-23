@@ -35,10 +35,16 @@ public class CandidatePanel extends JPanel {
     }
 
     void setWordlist(String[] words){
-        length = (words.length > 10) ? 10 : words.length;
-        for(int i = 0; i < length; i++) {
-            wordlist.add(words[i]);
-            labelWord[i].setText(Integer.toString(i) + ". " + words[i]);
+        wordlist.removeAllElements();
+        for(int i = 0; i < 10; i++){
+            labelWord[i].setText("");
+        }
+        if(words != null) {
+            length = (words.length > 10) ? 10 : words.length;
+            for (int i = 0; i < length; i++) {
+                wordlist.add(words[i]);
+                labelWord[i].setText(Integer.toString(i) + ". " + words[i]);
+            }
         }
     }
 

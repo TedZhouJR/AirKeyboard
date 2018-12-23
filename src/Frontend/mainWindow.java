@@ -1,4 +1,6 @@
 package Frontend;
+import Backend.Corrector;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,10 +11,12 @@ public class mainWindow extends JFrame{
     private CandidatePanel candidatePanel;
     public String inputWord;
     public String prefixWord;
+    private Corrector corrector;
     private int[] Xs;
     private int[] Ys;
-    public mainWindow(String windowName){
+    public mainWindow(String windowName, Corrector corrector){
         super(windowName);
+        this.corrector = corrector;
         Xs = new int[10];
         Ys = new int[10];
         keyPanel = new KeyPanel();

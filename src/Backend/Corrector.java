@@ -82,7 +82,7 @@ public class Corrector {
 	}
 
 	// 查找最短编辑距离集合 利用bigram模型计算概率得出概率最大的返回。
-	private void searchCollection(String pre) {
+	private void searchCollection(String pre, double val) {
 		String x = "1";
 		Map<String, Double> current;
 		if (!collection1.isEmpty()) {
@@ -92,16 +92,25 @@ public class Corrector {
 		} else {
 			current = null;
 		}
+		/*for (Map.Entry<String, Double> entry : current.entrySet()) {
+			x = entry.getKey();
+			if (x.equalsIgnoreCase("of")) {
+				System.out.println(x);
+			}
+		}*/
 		for (Map.Entry<String, Double> entry : current.entrySet()) {
 			x = entry.getKey();
 			if (!pre.equalsIgnoreCase("")) {
 				if (temp2.get(pre + " " + x) != null) {
-					result.put((entry.getValue() / temp.get("map1")) * (temp2.get(pre + " " + x) / temp2.get("map2")), x);
+					result.put((entry.getValue() / temp.get("map1")) * (temp2.get(pre + " " + x) / temp2.get("map2")) * val, x);
 				} else {
-					result.put((entry.getValue() / temp.get("map1")) * (0.1 / temp2.get("map2")), x);
+					result.put((entry.getValue() / temp.get("map1")) * (0.1 / temp2.get("map2")) * val, x);
 				}
 			} else {
-				result.put(entry.getValue() / temp.get("map1"), x);
+				result.put((entry.getValue() / temp.get("map1")) * val , x);
+				/*if (x.equalsIgnoreCase("of")) {
+					System.out.println(x);
+				}*/
 			}
 		}
 	}
@@ -122,8 +131,10 @@ public class Corrector {
 					}
 				}
 			}
-			String[] a = new String[1];
-			a[0] = "";
+			String[] a = new String[9];
+			for (int ic=0; ic <9 ;ic++) {
+				a[ic] = "";
+			}
 			//System.out.println(x + " NULL");
 			mwin.pushKey(x, a);
 			return;
@@ -134,7 +145,7 @@ public class Corrector {
 			String word = mwin.inputWord.toLowerCase()+entry.getKey().toLowerCase();
 			buildOc(word, collection1);
 			buildTc();
-			searchCollection(xc);
+			searchCollection(xc, entry.getValue());
 			collection1.clear();
 			collection2.clear();
 		}
@@ -142,17 +153,35 @@ public class Corrector {
 		List<Double> lists = new ArrayList<Double>(keys);
 		Collections.sort(lists);
 		int io = 0;
+		int g = 0;
 		String[] res = new String[lists.size()];
+		for (int d=0; d<lists.size(); d++) {
+			res[d] = "";
+		}
 		for (int kk=lists.size()-1;kk>=0; kk--) {
-			if (io == 9) {
+			if (io == 10) {
 				break;
 			}
-			res[io] = result.get(lists.get(kk));
-			System.out.println(result.get(lists.get(kk)));
-			io++;
+			if (result.get(lists.get(kk)) != null) {
+				for (int d=0; d<lists.size(); d++){
+					if (res[d].equalsIgnoreCase(result.get(lists.get(kk)))) {
+						g = 1;
+					}
+				}
+				if (g == 0) {
+					res[io] = result.get(lists.get(kk));
+					io++;
+				} else {
+					g = 0;
+					continue;
+				}
+			}
+			//System.out.println(result.get(lists.get(kk)));
 		}
 		result.clear();
-		//System.out.println(res[0].substring(res[0].length()-1) + " "+res);
+		/*for (int d=0; d<lists.size(); d++) {
+			System.out.println(res[d]);
+		}*/
 		mwin.pushKey(res[0].substring(res[0].length()-1), res);
 	}
 }

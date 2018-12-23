@@ -3,6 +3,8 @@ import Backend.Corrector;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class mainWindow extends JFrame{
     private KeyPanel keyPanel;
@@ -106,6 +108,9 @@ public class mainWindow extends JFrame{
                 }
             }
             String lastKey = Character.toString(inputWord.charAt(inputWord.length() - 1));
+            Map<String, Double> prob_dict = new HashMap<>();
+            prob_dict.put(lastKey, 1.0);
+
             // 调用东池的函数重新计算wordlist并显示
         }
     }

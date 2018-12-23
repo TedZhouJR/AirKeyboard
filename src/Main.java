@@ -14,7 +14,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args){
-        mainWindow mainwindow = new mainWindow("Air Key Board");
+        Corrector conrrector = new Corrector();
+        mainWindow mainwindow = new mainWindow("Air Key Board", conrrector);
 //        mainwindow.showCenter();
 //        int num = 10;             //DEBUG
 //        float [] Xs = new float[10];
@@ -32,7 +33,7 @@ public class Main {
 //        }
 
         // Create a sample listener and controller
-        LeapMotionListener listener = new LeapMotionListener(mainwindow, new Corrector());
+        LeapMotionListener listener = new LeapMotionListener(mainwindow, conrrector);
         Controller controller = new Controller();
 
         // Have the sample listener receive events from the controller

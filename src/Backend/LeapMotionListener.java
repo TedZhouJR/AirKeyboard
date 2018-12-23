@@ -97,16 +97,13 @@ public class LeapMotionListener extends Listener {
             mWindow.pushKey(nearestNine[0], null);
             return;
         }
-        System.out.println();
+        System.out.println("Calculate!");
         double tot_distance = 0.0;
         for (int i = 0; i < 9; i++) {
             tot_distance += 1 / distance[i];
         }
         for (int i = 0; i < 9; i++) {
             prob_dict.put(nearestNine[i], 1 / (tot_distance * distance[i]));
-        }
-        for (int i = 0; i < 9; i++) {
-            System.out.print(prob_dict);
         }
         corrector.dealWith(prob_dict, mWindow);
     }

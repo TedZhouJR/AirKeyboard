@@ -2,7 +2,10 @@ package Backend;
 import Frontend.mainWindow;
 import Frontend.KeyPanel;
 import com.leapmotion.leap.*;
+import com.leapmotion.leap.Frame;
 
+import java.awt.*;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.Math;
@@ -18,11 +21,15 @@ public class LeapMotionListener extends Listener {
     Map<Integer, Float> mFingerMap;
     Map<Integer, Boolean> mFingerStatus;
     Map<Integer, Vector> mFingerPos;
-//    private int[] descendingList = new int[MAX_FINGER_ID], risingList = new int[MAX_FINGER_ID];
-    private int descending = 0, rising = 0;
-    private int MAX_DESCEND = 5, MAX_RISE = 4;
-//    private int[] latestFingerIDList = new int[MAX_FINGER_ID];
-//    private int latestFingerInList = -1;
+    private int[] descendingList = new int[MAX_FINGER_ID], risingList = new int[MAX_FINGER_ID];
+//    private int descending = 0, rising = 0;
+    private static final int MAX_DESCEND = 6, MAX_RISE = 4;
+    private static final int DESCEND_DISTANCE = 8, RISE_DISTANCE = 7;
+    private static final double VERTICAL_MOVING_RATE = 0.4;
+    private int[] latestFingerIDList = new int[MAX_FINGER_ID];
+    private int latestFingerInList = -1;
+    private String recentClick = "";
+    private String[] numberList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
     Frame mLastFrame;
     long mLastFrameId;
 
@@ -31,6 +38,7 @@ public class LeapMotionListener extends Listener {
         mFingerMap = new HashMap<>();
         mFingerStatus = new HashMap<>();
         mFingerPos = new HashMap<>();
+        corrector = new Corrector();
     }
 
 
@@ -57,12 +65,13 @@ public class LeapMotionListener extends Listener {
         System.out.println("Exited");
     }
 
-    private String[] calNearestNine(float pressX_in, float pressY_in) {   //返回距离最近的九个字母按键
-        float pressX = (pressX_in + 150) * 1000 / 300, pressY = (pressY_in + 50) * 300 / 100;
+    private void calNearestNine(float pressX_in, float pressY_in) {   //返回距离最近的九个字母按键
+        float pressX = (pressX_in + 135) * 1000 / 270, pressY = (pressY_in + 50) * 300 / 100;
         String[] nearestNine = {"","","","","","","","",""};
+        Map<String, Double> prob_dict = new HashMap<>();
         float[] distance = new float[9];
         float tmp_distance;
-        for (int i = 10; i < KeyPanel.keynum.length - 1; i++) { //不遍历数字和退格
+        for (int i = 0; i < KeyPanel.keynum.length - 1; i++) { //不遍历数字和退格
             tmp_distance = (KeyPanel.keyX[i] - pressX) * (KeyPanel.keyX[i] - pressX) + (KeyPanel.keyY[i] - pressY) * (KeyPanel.keyY[i] - pressY);
             for (int j = 0; j < 9; j++) {
                 if (tmp_distance < distance[j] || distance[j] == 0) {   //如果找到一个新的近的
@@ -77,12 +86,25 @@ public class LeapMotionListener extends Listener {
                 }
             }
         }
-        System.out.println("press x is " + pressX + ", press y is " + pressY);
-        for (int i = 0; i < 3; i++) {
-            System.out.print(nearestNine[i] + " distance is " + distance[i] + ", ");
+        recentClick = nearestNine[0];
+        for (String number:numberList) {
+            if (nearestNine[0].equals(number)) {
+                mWindow.pushKey(nearestNine[0], null);
+                return;
+            }
         }
         System.out.println();
-        return nearestNine;
+        double tot_distance = 0.0;
+        for (int i = 0; i < 9; i++) {
+            tot_distance += 1 / distance[i];
+        }
+        for (int i = 0; i < 9; i++) {
+            prob_dict.put(nearestNine[i], 1 / (tot_distance * distance[i]));
+        }
+        for (int i = 0; i < 9; i++) {
+            System.out.print(prob_dict);
+        }
+        corrector.dealWith(prob_dict, mWindow);
     }
 
     @Override
@@ -98,24 +120,24 @@ public class LeapMotionListener extends Listener {
         int index = 0;
 
         for (Finger finger : frame.fingers()) {
-//            int fingerIndex = 0;
+            int fingerIndex = 0;
             if (finger.type() == Finger.Type.TYPE_INDEX) {
-//                if (latestFingerInList == -1) {
-//                    latestFingerInList = 0;
-//                    latestFingerIDList[0] = finger.id();
-//                    risingList[0] = descendingList[0] = 0;
-//                } else {
-//                    for (fingerIndex = 0; fingerIndex <= latestFingerInList; fingerIndex++) {
-//                        if (latestFingerIDList[fingerIndex] == finger.id()) {
-//                            break;
-//                        }
-//                    }
-//                    if (fingerIndex > latestFingerInList) {
-//                        latestFingerInList++;
-//                        latestFingerIDList[fingerIndex] = finger.id();
-//                        risingList[fingerIndex] = descendingList[fingerIndex] = 0;
-//                    }
-//                }
+                if (latestFingerInList == -1) {
+                    latestFingerInList = 0;
+                    latestFingerIDList[0] = finger.id();
+                    risingList[0] = descendingList[0] = 0;
+                } else {
+                    for (fingerIndex = 0; fingerIndex <= latestFingerInList; fingerIndex++) {
+                        if (latestFingerIDList[fingerIndex] == finger.id()) {
+                            break;
+                        }
+                    }
+                    if (fingerIndex > latestFingerInList) {
+                        latestFingerInList++;
+                        latestFingerIDList[fingerIndex] = finger.id();
+                        risingList[fingerIndex] = descendingList[fingerIndex] = 0;
+                    }
+                }
                 Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
                 x[index] = bone.nextJoint().getX();
                 y[index] = bone.nextJoint().getZ();
@@ -130,38 +152,41 @@ public class LeapMotionListener extends Listener {
                     float distance2 = lastPos2.distanceTo(presentPos2);
                     if (mFingerStatus.get(finger.id())) { // 已经点击按下
                         push[index] = true;
-                        if (presentPos2.getY() - lastPos2.getY() > 7) { // 更新为松开
-                            if (rising < MAX_RISE) {
-                                rising++;
+                        if (presentPos2.getY() - lastPos2.getY() > RISE_DISTANCE) { // 更新为松开
+                            if (risingList[fingerIndex] < MAX_RISE) {
+                                risingList[fingerIndex]++;
                             } else {
                                 push[index] = false;
                                 mFingerStatus.put(finger.id(), false);
                                 mFingerMap.put(finger.id(), bone.nextJoint().getY());
                                 mFingerPos.put(finger.id(), bone.nextJoint());
-                                rising = 0;
+                                risingList[fingerIndex] = 0;
+                                mWindow.releaseKey(recentClick);
                             }
                         } else {
-                            rising = 0;
+                            risingList[fingerIndex] = 0;
                         }
                     } else { // 未点击按下
                         push[index] = false;
 //                        if (distance2 > 10 && distance2 < 40 && distance > 0) { // 更新为按下
-                        if (lastPos2.getY() - presentPos2.getY() > 8) { // 更新为按下
-                            if (descending < MAX_DESCEND) {
-                                descending++;
+//                        System.out.println("percentage : " + presentPos / distance2);
+                        if (lastPos2.getY() - presentPos2.getY() > DESCEND_DISTANCE &&
+                                presentPos / distance2 > VERTICAL_MOVING_RATE) { // 更新为按下
+                            if (descendingList[fingerIndex] < MAX_DESCEND) {
+                                descendingList[fingerIndex]++;
                             } else {
                                 push[index] = true;
                                 mFingerStatus.put(finger.id(), true);
                                 mFingerMap.put(finger.id(), bone.nextJoint().getY()); // 此位置需要固定
                                 mFingerPos.put(finger.id(), bone.nextJoint());
                                 calNearestNine(x[index], y[index]);
-                                descending = 0;
+                                descendingList[fingerIndex] = 0;
                             }
 //                        System.out.println("click!");
 //                        String[] pressed = new String[10];
 //                        corrector.dealWith(pressed);
                         } else {
-                            descending = 0;
+                            descendingList[fingerIndex] = 0;
                         }
                     }
                 } else {

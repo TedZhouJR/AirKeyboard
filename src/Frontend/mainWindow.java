@@ -87,6 +87,7 @@ public class mainWindow extends JFrame{
                 int length = inputWord.length() - 1;
                 inputWord = inputWord.substring(0, length);
                 if(inputWord.equals("")){
+                    candidatePanel.setWordlist(null);
                     return;
                 }
             }
@@ -104,6 +105,7 @@ public class mainWindow extends JFrame{
                 else{
                     inputWord = "";
                     prefixWord = "";
+                    candidatePanel.setWordlist(null);
                     return;
                 }
             }

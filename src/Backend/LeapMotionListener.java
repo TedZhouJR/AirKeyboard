@@ -71,7 +71,7 @@ public class LeapMotionListener extends Listener {
         Map<String, Double> prob_dict = new HashMap<>();
         float[] distance = new float[9];
         float tmp_distance;
-        for (int i = 0; i < KeyPanel.keynum.length; i++) { //不遍历数字和退格
+        for (int i = 0; i < KeyPanel.keynum.length; i++) {
             tmp_distance = (KeyPanel.keyX[i] - pressX) * (KeyPanel.keyX[i] - pressX) + (KeyPanel.keyY[i] - pressY) * (KeyPanel.keyY[i] - pressY);
             for (int j = 0; j < 9; j++) {
                 if (tmp_distance < distance[j] || distance[j] == 0) {   //如果找到一个新的近的
@@ -88,16 +88,16 @@ public class LeapMotionListener extends Listener {
         }
         recentClick = nearestNine[0];
         for (String number:numberList) {
-            if (nearestNine[0].equals(number)) {
-                mWindow.pushKey(nearestNine[0], null);
+            if (recentClick.equals(number)) {
+                mWindow.pushKey(recentClick, null);
                 return;
             }
         }
-        if (nearestNine[0].equals("Backspace")) {
-            mWindow.pushKey(nearestNine[0], null);
+        if (recentClick.equals("Backspace")) {
+            mWindow.pushKey(recentClick, null);
             return;
         }
-        System.out.println();
+//        System.out.println();
         double tot_distance = 0.0;
         for (int i = 0; i < 9; i++) {
             tot_distance += 1 / distance[i];
@@ -105,17 +105,16 @@ public class LeapMotionListener extends Listener {
         for (int i = 0; i < 9; i++) {
             prob_dict.put(nearestNine[i], 1 / (tot_distance * distance[i]));
         }
-        for (int i = 0; i < 9; i++) {
-            System.out.print(prob_dict);
-        }
-        corrector.dealWith(prob_dict, mWindow);
+//        for (int i = 0; i < 9; i++) {
+//            System.out.print(prob_dict);
+//        }
+        mWindow.pushKey(recentClick, null);
+//        corrector.dealWith(prob_dict, mWindow);
     }
 
     @Override
     public void onFrame(Controller controller) {
-        // Get the most recent frame and report some basic information
         Frame frame = controller.frame();
-//        System.out.println("new frame");
 //        int fingerNum = frame.hands().count() * 5;
         int fingerNum = frame.hands().count();
         float[] x = new float[fingerNum];
@@ -156,7 +155,7 @@ public class LeapMotionListener extends Listener {
                     Vector presentPos2 = bone.nextJoint();
                     float distance2 = lastPos2.distanceTo(presentPos2);
                     if (mFingerStatus.get(finger.id())) { // 已经点击按下
-                        push[index] = true;
+//                        push[index] = true;
                         if (presentPos2.getY() - lastPos2.getY() > RISE_DISTANCE) { // 更新为松开
                             if (risingList[fingerID] < MAX_RISE) {
                                 risingList[fingerID]++;
@@ -180,12 +179,12 @@ public class LeapMotionListener extends Listener {
                             if (descendingList[fingerID] < MAX_DESCEND) {
                                 descendingList[fingerID]++;
                             } else {
-                                mWindow.releaseKey(recentClick);
-                                push[index] = true;
+//                                mWindow.releaseKey(recentClick);
+//                                push[index] = true;
                                 mFingerStatus.put(finger.id(), true);
                                 mFingerMap.put(finger.id(), bone.nextJoint().getY()); // 此位置需要固定
                                 mFingerPos.put(finger.id(), bone.nextJoint());
-                                calNearestNine(x[index], y[index]);
+//                                calNearestNine(x[index], y[index]);
                                 descendingList[fingerID] = 0;
                             }
 //                        System.out.println("click!");
@@ -202,6 +201,26 @@ public class LeapMotionListener extends Listener {
                     mFingerPos.put(finger.id(), bone.nextJoint());
                 }
                 index++;
+            }
+        }
+
+        // 体会gesture
+        GestureList gestures = frame.gestures();
+        if (!gestures.isEmpty()) {
+            System.out.println("gestures: " + gestures);
+        }
+        for (Gesture gesture : gestures) {
+            if (gesture.type().equals(Gesture.Type.TYPE_KEY_TAP)) {
+                releaseAllKeys(); // 松开所有按键
+                KeyTapGesture keyTap = new KeyTapGesture(gesture);
+
+                Finger tapFinger = (Finger) keyTap.pointable();
+
+                System.out.println("Key Tap id: " + keyTap.id()
+                        + ", " + keyTap.state()
+                        + ", position: " + keyTap.position()
+                        + ", direction: " + keyTap.direction());
+                calNearestNine(keyTap.position().getX(), keyTap.position().getY());
             }
         }
 
@@ -229,151 +248,11 @@ public class LeapMotionListener extends Listener {
             }
         }
 
-//        mFingerMap = new HashMap<>();
-//        for (Finger finger : frame.fingers()) {
-//            Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
-//            float pos = bone.nextJoint().getY();
-//            mFingerMap.put(finger.id(), pos);
-//        }
-//
-//        mFingerStatus = new HashMap<>();
+    }
 
-
-
-//        mLastFrame = controller.
-//        mLastFrameId = controller.frame().id();
-//        for (Hand hand : frame.hands()) {
-//            String handType = hand.isLeft() ? "Left hand" : "Right hand";
-//            System.out.println(handType);
-//
-////            // Get fingers
-////            for (Finger finger : hand.fingers()) {
-////                finger.type();
-////                //Get Bones
-////                Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
-////                System.out.println(bone.nextJoint());
-////                x[index] = bone.nextJoint().getX();
-////                y[index] = bone.nextJoint().getZ();
-////                index++;
-////            }
-//
-//            if (hand.isLeft()) {
-//                mCurrentLeftHand = hand;
-//                System.out.println("save left hand");
-//            }
-//            if (hand.isRight()) {
-//                mCurrentRightHand = hand;
-//                System.out.println("save right hand");
-//            }
-//        }
-//
-//        // System.out.println("left count: " + mLastLeftHand.fingers().count());
-////        System.out.println("right count: " + mLastRightHand.fingers().count());
-//
-//        for (int id : mFingerMap.keySet()) {
-//            Finger fingerNew = frame.finger(id);
-//            if (fingerNew.isValid()) {
-//                System.out.println("valid");
-//                Bone boneOld = fingerNew.bone(Bone.Type.TYPE_DISTAL);
-//                x[index] = boneOld.nextJoint().getX();
-//                y[index] = boneOld.nextJoint().getZ();
-//                Bone boneNew = fingerNew.bone(Bone.Type.TYPE_DISTAL);
-//                float distance = boneOld.nextJoint().getY() - boneNew.nextJoint().getY();
-//                if (distance > 20 && distance < 50) {
-//                    push[index] = true;
-//                } else {
-//                    push[index] = false;
-//                }
-//                index++;
-//            }
-//        }
-//
-//        for (Finger fingerOld : mLastLeftHand.fingers()) {
-//            Finger fingerNew = mCurrentLeftHand.finger(fingerOld.id());
-//            System.out.println("new id: " + fingerOld.id());
-//            if (fingerNew.isValid()) {
-//                System.out.println("valid");
-//                Bone boneOld = fingerOld.bone(Bone.Type.TYPE_DISTAL);
-//                x[index] = boneOld.nextJoint().getX();
-//                y[index] = boneOld.nextJoint().getZ();
-//                Bone boneNew = fingerNew.bone(Bone.Type.TYPE_DISTAL);
-//                float distance = boneOld.nextJoint().getY() - boneNew.nextJoint().getY();
-//                if (distance > 20 && distance < 50) {
-//                    push[index] = true;
-//                } else {
-//                    push[index] = false;
-//                }
-//                index++;
-//            }
-//        }
-//        for (Finger fingerOld : mLastRightHand.fingers()) {
-//            Finger fingerNew = mCurrentRightHand.finger(fingerOld.id());
-//            System.out.println("new id: " + fingerOld.id());
-//            if (fingerNew.isValid()) {
-//                System.out.println("valid");
-//                Bone boneOld = fingerOld.bone(Bone.Type.TYPE_DISTAL);
-//                x[index] = boneOld.nextJoint().getX();
-//                y[index] = boneOld.nextJoint().getZ();
-//                Bone boneNew = fingerNew.bone(Bone.Type.TYPE_DISTAL);
-//                float distance = boneOld.nextJoint().getY() - boneNew.nextJoint().getY();
-//                if (distance > 20 && distance < 50) {
-//                    push[index] = true;
-//                } else {
-//                    push[index] = false;
-//                }
-//                index++;
-//            }
-//        }
-
-
-//
-//        mFingerMap = new HashMap<>();
-
-//        System.out.println("Frame id: " + frame.id()
-//                + ", timestamp: " + frame.timestamp()
-//                + ", hands: " + frame.hands().count()
-//                + ", fingers: " + frame.fingers().count());
-//
-//        //Get hands
-//        for(Hand hand : frame.hands()) {
-//            String handType = hand.isLeft() ? "Left hand" : "Right hand";
-//            System.out.println("  " + handType + ", id: " + hand.id()
-//                    + ", palm position: " + hand.palmPosition());
-//
-//            // Get the hand's normal vector and direction
-//            Vector normal = hand.palmNormal();
-//            Vector direction = hand.direction();
-//
-//            // Calculate the hand's pitch, roll, and yaw angles
-//            System.out.println("  pitch: " + Math.toDegrees(direction.pitch()) + " degrees, "
-//                    + "roll: " + Math.toDegrees(normal.roll()) + " degrees, "
-//                    + "yaw: " + Math.toDegrees(direction.yaw()) + " degrees");
-//
-//            // Get arm bone
-//            Arm arm = hand.arm();
-//            System.out.println("  Arm direction: " + arm.direction()
-//                    + ", wrist position: " + arm.wristPosition()
-//                    + ", elbow position: " + arm.elbowPosition());
-//
-//            // Get fingers
-//            for (Finger finger : hand.fingers()) {
-//                System.out.println("    " + finger.type() + ", id: " + finger.id()
-//                        + ", length: " + finger.length()
-//                        + "mm, width: " + finger.width() + "mm");
-//
-//                //Get Bones
-//                for(Bone.Type boneType : Bone.Type.values()) {
-//                    Bone bone = finger.bone(boneType);
-//                    System.out.println("      " + bone.type()
-//                            + " bone, start: " + bone.prevJoint()
-//                            + ", end: " + bone.nextJoint()
-//                            + ", direction: " + bone.direction());
-//                }
-//            }
-//        }
-//
-//        if (!frame.hands().isEmpty()) {
-//            System.out.println();
-//        }
+    public void releaseAllKeys() {
+        for (String key : KeyPanel.keynum) {
+            mWindow.releaseKey(key);
+        }
     }
 }

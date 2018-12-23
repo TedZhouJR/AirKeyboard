@@ -119,7 +119,6 @@ public class LeapMotionListener extends Listener {
     @Override
     public void onFrame(Controller controller) {
         Frame frame = controller.frame();
-//        int fingerNum = frame.hands().count() * 5;
         int fingerNum = frame.hands().count();
         float[] x = new float[fingerNum];
         float[] y = new float[fingerNum];
@@ -130,8 +129,6 @@ public class LeapMotionListener extends Listener {
         for (int key : mFingerStatus.keySet()) {
             if (!frame.finger(key).isValid()) {
                 mFingerStatus.remove(key);
-//                mFingerMap.remove(key);
-//                mFingerPos.remove(key);
             }
         }
 
@@ -141,16 +138,16 @@ public class LeapMotionListener extends Listener {
             if (finger.type() == Finger.Type.TYPE_INDEX) { // 食指
                 Bone bone0 = finger.bone(Bone.Type.TYPE_PROXIMAL);  // 手指指根处骨头
                 Vector direct = bone0.direction();
-                Bone bone1 = finger.bone(Bone.Type.TYPE_DISTAL);  // 手指末端处骨头
+//                Bone bone1 = finger.bone(Bone.Type.TYPE_DISTAL);  // 手指末端处骨头
+                Bone bone1 = finger.bone(Bone.Type.TYPE_METACARPAL);  // 手指指节处
                 x[index] = bone1.nextJoint().getX();
                 y[index] = bone1.nextJoint().getZ();
-                float angle = direct.angleTo(finger.hand().direction());
+                float angle = direct.angleTo(finger.hand().palmNormal());
 //                System.out.println("angle: " + angle);
                 // 如果角度大于阈值，且只判断按下的一瞬间，则判定为按下
-                if (angle < degree2Rad(180 - ANGLE)) {
+                if (angle > degree2Rad(180 - ANGLE)) {
 
-                    System.out.println("set: "+mFingerStatus);
-//                    System.out.println("DEBUG1");
+//                    System.out.println("set: " + mFingerStatus);
 //                    releaseAllKeys();
                     push[index] = true;
                     if (!mFingerStatus.containsKey(finger.id()) || !mFingerStatus.get(finger.id())) {
@@ -159,11 +156,8 @@ public class LeapMotionListener extends Listener {
                         mWindow.releaseKey(recentClick);
                         calNearestNine(x[index], y[index]);
                     }
-//                    mFingerStatus.replace(finger.id(), true);
-//                    mFingerStatus.remove(finger.id());
                     mFingerStatus.put(finger.id(), true);
                 } else {
-//                    System.out.println("DEBUG2");
                     mWindow.releaseKey(recentClick);
                     push[index] = false;
                     mFingerStatus.put(finger.id(), false);

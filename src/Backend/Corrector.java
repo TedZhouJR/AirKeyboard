@@ -117,20 +117,20 @@ public class Corrector {
 
 	// 程序入口
 	public void dealWith(Map<String, Double> arg, mainWindow mwin) {
-		if (mwin.inputWord.length() < 1) {
-			String x = "";
-			double v = 0;
-			for (Map.Entry<String, Double> entry : arg.entrySet()) {
-				if (x.equalsIgnoreCase("")) {
+		String x = "";
+		double v = 0;
+		for (Map.Entry<String, Double> entry : arg.entrySet()) {
+			if (x.equalsIgnoreCase("")) {
+				x = entry.getKey();
+				v = entry.getValue();
+			} else {
+				if (v < entry.getValue()) {
 					x = entry.getKey();
 					v = entry.getValue();
-				} else {
-					if (v < entry.getValue()) {
-						x = entry.getKey();
-						v = entry.getValue();
-					}
 				}
 			}
+		}
+		if (mwin.inputWord.length() < 1) {
 			String[] a = new String[9];
 			for (int ic=0; ic <9 ;ic++) {
 				a[ic] = "";
@@ -154,8 +154,8 @@ public class Corrector {
 		Collections.sort(lists);
 		int io = 0;
 		int g = 0;
-		String[] res = new String[lists.size()];
-		for (int d=0; d<lists.size(); d++) {
+		String[] res = new String[9];
+		for (int d=0; d<9; d++) {
 			res[d] = "";
 		}
 		for (int kk=lists.size()-1;kk>=0; kk--) {
@@ -182,6 +182,6 @@ public class Corrector {
 		/*for (int d=0; d<lists.size(); d++) {
 			System.out.println(res[d]);
 		}*/
-		mwin.pushKey(res[0].substring(res[0].length()-1), res);
+		mwin.pushKey(x, res);
 	}
 }

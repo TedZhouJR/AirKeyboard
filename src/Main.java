@@ -32,7 +32,7 @@ public class Main {
 //        }
 
         // Create a sample listener and controller
-        LeapMotionListener listener = new LeapMotionListener(mainwindow);
+        LeapMotionListener listener = new LeapMotionListener(mainwindow, new Corrector());
         Controller controller = new Controller();
 
         // Have the sample listener receive events from the controller

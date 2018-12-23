@@ -49,7 +49,7 @@ public class mainWindow extends JFrame{
             // 用于float的坐标变换到电脑上的像素点坐标，目前是将400mm × 120mm大小虚拟键盘映射到小键盘上
             // 然后将坐标中心从键盘中间平移到左上角，以正常显示
             // TODO: 键盘可现实点的像素大小变为1000 × 400，键盘坐标应该如何改动？
-            Xs[i] = (int)(((X[i] + 150.0) / 300.0) * 1000);
+            Xs[i] = (int)(((X[i] + 135.0) / 270.0) * 1000);
             Ys[i] = (int)(((Y[i] + 50.0) / 100.0) * 300);
         }
         glassPanel.update(num, Xs, Ys, push);

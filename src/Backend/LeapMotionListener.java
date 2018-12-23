@@ -3,6 +3,7 @@ import Frontend.mainWindow;
 import Frontend.KeyPanel;
 import com.leapmotion.leap.*;
 
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import java.lang.Math;
@@ -20,7 +21,7 @@ public class LeapMotionListener extends Listener {
     Map<Integer, Vector> mFingerPos;
     private int[] descendingList = new int[MAX_FINGER_ID], risingList = new int[MAX_FINGER_ID];
 //    private int descending = 0, rising = 0;
-    private static final int MAX_DESCEND = 5, MAX_RISE = 4;
+    private static final int MAX_DESCEND = 6, MAX_RISE = 4;
     private static final int DESCEND_DISTANCE = 8, RISE_DISTANCE = 7;
     private static final double VERTICAL_MOVING_RATE = 0.4;
     private int[] latestFingerIDList = new int[MAX_FINGER_ID];
@@ -60,9 +61,10 @@ public class LeapMotionListener extends Listener {
         System.out.println("Exited");
     }
 
-    private String[] calNearestNine(float pressX_in, float pressY_in) {   //返回距离最近的九个字母按键
+    private void calNearestNine(float pressX_in, float pressY_in) {   //返回距离最近的九个字母按键
         float pressX = (pressX_in + 135) * 1000 / 270, pressY = (pressY_in + 50) * 300 / 100;
         String[] nearestNine = {"","","","","","","","",""};
+        Map<String, Double> prob_dict = new HashMap<>();
         float[] distance = new float[9];
         float tmp_distance;
         for (int i = 10; i < KeyPanel.keynum.length - 1; i++) { //不遍历数字和退格
@@ -80,13 +82,18 @@ public class LeapMotionListener extends Listener {
                 }
             }
         }
-//        System.out.println("press x is " + pressX + ", press y is " + pressY);
-        for (int i = 0; i < 9; i++) {
-//            System.out.print(nearestNine[i] + " distance is " + distance[i] + ", ");
-            System.out.print(nearestNine[i] + " ");
-        }
         System.out.println();
-        return nearestNine;
+        double tot_distance = 0.0;
+        for (int i = 0; i < 9; i++) {
+            tot_distance += 1 / distance[i];
+        }
+        for (int i = 0; i < 9; i++) {
+            prob_dict.put(nearestNine[i], 1 / (tot_distance * distance[i]));
+        }
+        for (int i = 0; i < 9; i++) {
+            System.out.print(prob_dict);
+        }
+        corrector.dealWith(prob_dict, mWindow);
     }
 
     @Override
@@ -150,7 +157,7 @@ public class LeapMotionListener extends Listener {
                     } else { // 未点击按下
                         push[index] = false;
 //                        if (distance2 > 10 && distance2 < 40 && distance > 0) { // 更新为按下
-                        System.out.println("percentage : " + presentPos / distance2);
+//                        System.out.println("percentage : " + presentPos / distance2);
                         if (lastPos2.getY() - presentPos2.getY() > DESCEND_DISTANCE &&
                                 presentPos / distance2 > VERTICAL_MOVING_RATE) { // 更新为按下
                             if (descendingList[fingerIndex] < MAX_DESCEND) {
@@ -160,7 +167,7 @@ public class LeapMotionListener extends Listener {
                                 mFingerStatus.put(finger.id(), true);
                                 mFingerMap.put(finger.id(), bone.nextJoint().getY()); // 此位置需要固定
                                 mFingerPos.put(finger.id(), bone.nextJoint());
-//                                System.out.println(corrector.dealWith(calNearestNine(x[index], y[index]), mWindow));
+                                calNearestNine(x[index], y[index]);
                                 descendingList[fingerIndex] = 0;
                             }
 //                        System.out.println("click!");
@@ -193,7 +200,7 @@ public class LeapMotionListener extends Listener {
 
         for (Hand hand : frame.hands()) {
             if (hand.palmVelocity().magnitude() > 150) { // 手移动速度过快，需要重新定位
-                System.out.println("reset!");
+//                System.out.println("reset!");
                 for (Finger finger : frame.fingers()) {
                     Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
                     mFingerStatus.put(finger.id(), false); // 全部变成未按下

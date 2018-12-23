@@ -33,12 +33,12 @@ public class LeapMotionListener extends Listener {
     Frame mLastFrame;
     long mLastFrameId;
 
-    public LeapMotionListener(mainWindow mWindow) {
+    public LeapMotionListener(mainWindow mWindow, Corrector correctorIn) {
         this.mWindow = mWindow;
         mFingerMap = new HashMap<>();
         mFingerStatus = new HashMap<>();
         mFingerPos = new HashMap<>();
-        corrector = new Corrector();
+        corrector = correctorIn;
     }
 
 

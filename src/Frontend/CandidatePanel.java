@@ -43,7 +43,7 @@ public class CandidatePanel extends JPanel {
     }
 
     String chooseWord(int num){
-        String word = wordlist.get(num);
+        String word = ""  + wordlist.get(num);
         for(int i = 0; i < length; i++){
             labelWord[i].setText("");
         }

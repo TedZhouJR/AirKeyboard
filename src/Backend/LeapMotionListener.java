@@ -139,25 +139,6 @@ public class LeapMotionListener extends Listener {
         for (Finger finger : frame.fingers()) {
 //            int fingerID = 0;
             if (finger.type() == Finger.Type.TYPE_INDEX) { // 食指
-
-//                if (true) {
-//                if (latestFingerInList == -1) {
-//                    latestFingerInList = 0;
-//                    latestFingerIDList[0] = finger.id();
-//                    risingList[0] = descendingList[0] = 0;
-//                } else {
-//                    for (fingerID = 0; fingerID <= latestFingerInList; fingerID++) {
-//                        if (latestFingerIDList[fingerID] == finger.id()) {
-//                            break;
-//                        }
-//                    }
-//                    if (fingerID > latestFingerInList) {
-//                        latestFingerInList++;
-//                        latestFingerIDList[fingerID] = finger.id();
-//                        risingList[fingerID] = descendingList[fingerID] = 0;
-//                    }
-//                }
-
                 Bone bone0 = finger.bone(Bone.Type.TYPE_PROXIMAL);  // 手指指根处骨头
                 Vector direct = bone0.direction();
                 Bone bone1 = finger.bone(Bone.Type.TYPE_DISTAL);  // 手指末端处骨头
@@ -187,33 +168,9 @@ public class LeapMotionListener extends Listener {
                     push[index] = false;
                     mFingerStatus.put(finger.id(), false);
                 }
+                index++;
             }
-            index++;
         }
-
-//        // 体会gesture
-//        GestureList gestures = frame.gestures();
-////        if (!gestures.isEmpty()) {
-////            System.out.println("gestures: " + gestures);
-////        }
-//        for (Gesture gesture : gestures) {
-//            System.out.println("Gesture type is " + gesture.type());
-//
-//            if (gesture.type().equals(Gesture.Type.TYPE_KEY_TAP)) {
-////                releaseAllKeys(); // 松开所有按键
-//                System.out.println("Key tap");
-//                KeyTapGesture keyTap = new KeyTapGesture(gesture);
-////
-////                Finger tapFinger = (Finger) keyTap.pointable();
-//
-//                System.out.println("Key Tap id: " + keyTap.id()
-//                        + ", " + keyTap.state()
-//                        + ", position: " + keyTap.position()
-//                        + ", direction: " + keyTap.direction());
-//                calNearestNine(keyTap.position().getX(), keyTap.position().getZ());
-//            }
-//        }
-
         mWindow.update(fingerNum, x, y, push, null);
 
 //        // 去除map中不合法id

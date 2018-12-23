@@ -154,8 +154,8 @@ public class Corrector {
 		Collections.sort(lists);
 		int io = 0;
 		int g = 0;
-		String[] res = new String[9];
-		for (int d=0; d<9; d++) {
+		String[] res = new String[10];
+		for (int d=0; d<10; d++) {
 			res[d] = "";
 		}
 		for (int kk=lists.size()-1;kk>=0; kk--) {
@@ -163,7 +163,7 @@ public class Corrector {
 				break;
 			}
 			if (result.get(lists.get(kk)) != null) {
-				for (int d=0; d<lists.size(); d++){
+				for (int d=0; d<=9; d++){
 					if (res[d].equalsIgnoreCase(result.get(lists.get(kk)))) {
 						g = 1;
 					}

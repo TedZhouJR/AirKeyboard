@@ -45,6 +45,7 @@ public class LeapMotionListener extends Listener {
     @Override
     public void onInit(Controller controller) {
         System.out.println("Initialized");;
+        controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);
         // use head mounted display
 //        controller.setPolicy(Controller.PolicyFlag.POLICY_OPTIMIZE_HMD);
     }
@@ -206,21 +207,24 @@ public class LeapMotionListener extends Listener {
 
         // 体会gesture
         GestureList gestures = frame.gestures();
-        if (!gestures.isEmpty()) {
-            System.out.println("gestures: " + gestures);
-        }
+//        if (!gestures.isEmpty()) {
+//            System.out.println("gestures: " + gestures);
+//        }
         for (Gesture gesture : gestures) {
-            if (gesture.type().equals(Gesture.Type.TYPE_KEY_TAP)) {
-                releaseAllKeys(); // 松开所有按键
-                KeyTapGesture keyTap = new KeyTapGesture(gesture);
+            System.out.println("Gesture type is " + gesture.type());
 
-                Finger tapFinger = (Finger) keyTap.pointable();
+            if (gesture.type().equals(Gesture.Type.TYPE_KEY_TAP)) {
+//                releaseAllKeys(); // 松开所有按键
+                System.out.println("Key tap");
+                KeyTapGesture keyTap = new KeyTapGesture(gesture);
+//
+//                Finger tapFinger = (Finger) keyTap.pointable();
 
                 System.out.println("Key Tap id: " + keyTap.id()
                         + ", " + keyTap.state()
                         + ", position: " + keyTap.position()
                         + ", direction: " + keyTap.direction());
-                calNearestNine(keyTap.position().getX(), keyTap.position().getY());
+                calNearestNine(keyTap.position().getX(), keyTap.position().getZ());
             }
         }
 

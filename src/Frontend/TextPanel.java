@@ -46,10 +46,28 @@ class TextPanel extends JPanel {
         area.setCaretPosition(area.getText().length());
     }
 
-    void moveCursor(){
+    String[] moveCursor(boolean isLeft){
         int pos = area.getCaretPosition();
-        if(pos > 0) {
-            area.setCaretPosition(pos - 1);
+        int length = area.getText().length();
+        if(isLeft) {
+            if(pos > 0) {
+                pos = pos - 1;
+                area.setCaretPosition(pos);
+            }
+            else{
+                return null;
+            }
         }
+        else{
+            if(pos < length){
+                pos = pos + 1;
+                area.setCaretPosition(pos);
+            }
+            else{
+                return null;
+            }
+        }
+        String preText = area.getText().substring(0, pos);
+        return preText.split(" +");
     }
 }

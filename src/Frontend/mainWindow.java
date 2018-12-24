@@ -134,7 +134,30 @@ public class mainWindow extends JFrame{
         glassPanel.repaint();
     }
 
-    public void moveCursor(){
-        textPanel.moveCursor();
+    public void moveCursor(boolean isLeft){
+        String[] preWords = textPanel.moveCursor(isLeft);
+        String[] newwords = setInputWord(preWords);
+        if(newwords != null){
+            candidatePanel.setWordlist(newwords);
+        }
+    }
+
+    private String[] setInputWord(String[] preWords){
+        if(preWords.length >= 2){
+            inputWord = preWords[preWords.length - 1];
+            prefixWord = preWords[preWords.length - 2];
+        }
+        else if(preWords.length == 1){
+            inputWord = preWords[0];
+            prefixWord = "";
+        }
+        else{
+            inputWord = "";
+            prefixWord = "";
+            candidatePanel.setWordlist(null);
+            return null;
+        }
+        Map<String, Double> prob_dict = new HashMap<>();
+        return corrector.setList(prob_dict, this);
     }
 }

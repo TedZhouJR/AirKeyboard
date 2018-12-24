@@ -58,6 +58,13 @@ public class Prepare {
 		dealWith("src1.txt");
 		dealWith("src2.txt");
 		dealWith("src3.txt");
+		dealWith("src4.txt");
+		dealWith("src5.txt");
+		dealWith("src6.txt");
+		dealWith("src7.txt");
+		dealWith("src8.txt");
+		dealWith("src9.txt");
+		dealWith("src10.txt");
 		try {
 			FileOutputStream fos=new FileOutputStream("dst.txt");
 	        ObjectOutputStream objectOutputStream=new ObjectOutputStream(fos);

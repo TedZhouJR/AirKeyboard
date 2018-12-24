@@ -3,6 +3,7 @@ import Frontend.mainWindow;
 import Frontend.KeyPanel;
 import com.leapmotion.leap.*;
 import com.leapmotion.leap.Frame;
+import java.util.Random;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,9 @@ public class LeapMotionListener extends Listener {
     private Map<Integer, Vector> mFingerPos;
     private static final double DESCEND_PERCENTAGE = 0.88, RISE_PERCENTAGE = 0.8, RISE_TIME = 3;
     private static final double DESCEND_DISTANCE = 2.5, RISE_DISTANCE = 0.0, DESCEND_TIME = 3;
+    private static final double SWIP_UNIT = 10.0;
+    private double swipPosX = 0.0;
+    private boolean isSwiping = false;
     private String recentClick = "";
     private String[] numberList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
 
@@ -104,6 +108,51 @@ public class LeapMotionListener extends Listener {
         boolean[] push = new boolean[fingerNum];
         int index = 0;
 
+
+        Vector indexDirection = null;
+        Vector palmDirection = null;
+        Bone refereeBone = null;
+        Vector leftDirection = new Vector(-1, 0, 0);
+        for (Hand hand : frame.hands()) {
+            if (hand.isRight()) {   //右手
+                palmDirection = hand.palmNormal();   //[x, y, z]
+                for (Finger finger : hand.fingers()) {
+                    if (finger.type() == Finger.Type.TYPE_INDEX) {
+                        refereeBone = finger.bone(Bone.Type.TYPE_PROXIMAL);
+                        indexDirection = refereeBone.direction();  //[x, y, z]
+                    }
+                }
+            }
+        }
+        if (indexDirection == null || palmDirection == null) {
+            return;
+        }
+        if (palmDirection.angleTo(leftDirection) < degree2rad(25) && palmDirection.angleTo(indexDirection) > degree2rad(70) &&
+                palmDirection.angleTo(indexDirection) < degree2rad(110) ) {
+            //右手竖直且张开
+            if (!isSwiping) {
+                swipPosX = refereeBone.nextJoint().getX();
+                isSwiping = true;
+                return;
+            }
+            isSwiping = true;
+            double tmpSwipePosX = refereeBone.nextJoint().getX();
+            double diffSwipePosX = tmpSwipePosX - swipPosX;
+            if (diffSwipePosX > SWIP_UNIT) {
+                //光标右移动
+                //...TODO 通知前端
+                System.out.println("Move right a unit");
+                swipPosX = tmpSwipePosX;
+            } else if (diffSwipePosX < -SWIP_UNIT) {
+                //光标左移动
+                //...TODO 通知前端
+                System.out.println("Move left a unit");
+                swipPosX = tmpSwipePosX;
+            }
+            return;
+        }
+
+        isSwiping = false;
         for (Finger finger : frame.fingers()) {
             if (finger.type() == Finger.Type.TYPE_INDEX) {
                 Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
@@ -187,5 +236,9 @@ public class LeapMotionListener extends Listener {
                 break;
             }
         }
+    }
+
+    private double degree2rad(double degree) {
+        return degree * Math.PI / 180.0;
     }
 }

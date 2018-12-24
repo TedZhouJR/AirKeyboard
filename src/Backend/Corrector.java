@@ -93,88 +93,23 @@ public class Corrector {
 		} else {
 			current = null;
 		}
-		/*for (Map.Entry<String, Double> entry : current.entrySet()) {
-			x = entry.getKey();
-			if (x.equalsIgnoreCase("of")) {
-				System.out.println(x);
-			}
-		}*/
-		for (Map.Entry<String, Double> entry : current.entrySet()) {
-			x = entry.getKey();
-			if (!pre.equalsIgnoreCase("")) {
-				if (temp2.get(pre + " " + x) != null) {
-					result.put((entry.getValue() / temp.get("map1")) * (temp2.get(pre + " " + x) / temp2.get("map2")) * val, x);
-				} else {
-					result.put((entry.getValue() / temp.get("map1")) * (0.1 / temp2.get("map2")) * val, x);
-				}
-			} else {
-				result.put((entry.getValue() / temp.get("map1")) * val , x);
-				/*if (x.equalsIgnoreCase("of")) {
-					System.out.println(x);
-				}*/
-			}
-		}
-	}
-
-	public String[] setList(Map<String, Double> arg, mainWindow mwin){
-		if (mwin.inputWord.length() < 1) {
-			for (int ic=0; ic <10 ;ic++) {
-				wordlist[ic] = "";
-			}
-			return wordlist;
-		}
-		String xc = mwin.prefixWord.toLowerCase();
-		int i = 0;
-		if (!arg.isEmpty()) {
-			for (Map.Entry<String, Double> entry : arg.entrySet()) {
-				String word = mwin.inputWord.toLowerCase() + entry.getKey().toLowerCase();
-				buildOc(word, collection1);
-				buildTc();
-				searchCollection(xc, entry.getValue());
-				collection1.clear();
-				collection2.clear();
-			}
-		} else {
-			String word = mwin.inputWord.toLowerCase();
-			buildOc(word, collection1);
-			buildTc();
-			searchCollection(xc, 1);
-			collection1.clear();
-			collection2.clear();
-		}
-		Set <Double> keys= result.keySet();
-		List<Double> lists = new ArrayList<Double>(keys);
-		Collections.sort(lists);
-		int io = 0;
-		int g = 0;
-		for (int d=0; d<10; d++) {
-			wordlist[d] = "";
-		}
-		for (int kk=lists.size()-1;kk>=0; kk--) {
-			if (io == 10) {
-				break;
-			}
-			if (result.get(lists.get(kk)) != null) {
-				for (int d=0; d<=9; d++){
-					if (wordlist[d].equalsIgnoreCase(result.get(lists.get(kk)))) {
-						g = 1;
+		if (current != null) {
+			for (Map.Entry<String, Double> entry : current.entrySet()) {
+				x = entry.getKey();
+				if (!pre.equalsIgnoreCase("")) {
+					if (temp2.get(pre + " " + x) != null) {
+						result.put((entry.getValue() / temp.get("map1")) * (temp2.get(pre + " " + x) / temp2.get("map2")) * val, x);
+					} else {
+						result.put((entry.getValue() / temp.get("map1")) * (0.1 / temp2.get("map2")) * val, x);
 					}
-				}
-				if (g == 0) {
-					wordlist[io] = result.get(lists.get(kk));
-					io++;
 				} else {
-					g = 0;
+					result.put((entry.getValue() / temp.get("map1")) * val, x);
 				}
 			}
-			//System.out.println(result.get(lists.get(kk)));
 		}
-		result.clear();
-		return wordlist;
 	}
 
-	// 程序入口
-	public void dealWith(Map<String, Double> arg, mainWindow mwin) {
+	private String getBigValue(Map<String, Double> arg){
 		String x = "";
 		double v = 0;
 		for (Map.Entry<String, Double> entry : arg.entrySet()) {
@@ -188,6 +123,71 @@ public class Corrector {
 				}
 			}
 		}
+		return x;
+	}
+
+	public String[] setList(Map<String, Double> arg, mainWindow mwin){
+		for (int d=1; d<10; d++) {
+			wordlist[d] = "";
+		}
+		if (mwin.inputWord.length() < 1) {
+			wordlist[0] = "";
+			return wordlist;
+		}
+		String xc = mwin.prefixWord.toLowerCase();
+		int i = 0;
+		if (!arg.isEmpty()) {
+			for (Map.Entry<String, Double> entry : arg.entrySet()) {
+				String word = mwin.inputWord.toLowerCase() + entry.getKey().toLowerCase();
+				buildOc(word, collection1);
+				buildTc();
+				searchCollection(xc, entry.getValue());
+				collection1.clear();
+				collection2.clear();
+			}
+			wordlist[0] = mwin.inputWord + getBigValue(arg);
+		} else {
+			String word = mwin.inputWord.toLowerCase();
+			buildOc(word, collection1);
+			buildTc();
+			searchCollection(xc, 1);
+			collection1.clear();
+			collection2.clear();
+			wordlist[0] = mwin.inputWord;
+		}
+		if (!result.isEmpty()) {
+			Set<Double> keys = result.keySet();
+			List<Double> lists = new ArrayList<Double>(keys);
+			Collections.sort(lists);
+			int io = 1;
+			int g = 0;
+			for (int kk = lists.size() - 1; kk >= 0; kk--) {
+				if (io == 10) {
+					break;
+				}
+				if (result.get(lists.get(kk)) != null) {
+					for (int d = 0; d <= 9; d++) {
+						if (wordlist[d].equalsIgnoreCase(result.get(lists.get(kk)))) {
+							g = 1;
+						}
+					}
+					if (g == 0) {
+						wordlist[io] = result.get(lists.get(kk));
+						io++;
+					} else {
+						g = 0;
+					}
+				}
+				//System.out.println(result.get(lists.get(kk)));
+			}
+			result.clear();
+		}
+		return wordlist;
+	}
+
+	// 程序入口
+	public void dealWith(Map<String, Double> arg, mainWindow mwin) {
+		String x = getBigValue(arg);
 		if (mwin.inputWord.length() < 1) {
 			for (int ic=0; ic <10 ;ic++) {
 				wordlist[ic] = "";

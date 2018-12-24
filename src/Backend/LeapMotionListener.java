@@ -8,21 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LeapMotionListener extends Listener {
-    private static int MAX_FINGER_ID = 999;
-    mainWindow mWindow;
-    Corrector corrector;
-    Map<Integer, Float> mFingerPosY;
-    Map<Integer, Boolean> mFingerStatus;
-    Map<Integer, Integer> mFingerRising, mFingerDescending;
-    Map<Integer, Vector> mFingerPos;
+    private mainWindow mWindow;
+    private Corrector corrector;
+    private Map<Integer, Float> mFingerPosY;
+    private Map<Integer, Boolean> mFingerStatus;
+    private Map<Integer, Integer> mFingerRising, mFingerDescending;
+    private Map<Integer, Vector> mFingerPos;
     private static final double DESCEND_PERCENTAGE = 0.88, RISE_PERCENTAGE = 0.8, RISE_TIME = 3;
     private static final double DESCEND_DISTANCE = 2.5, RISE_DISTANCE = 0.0, DESCEND_TIME = 3;
-    private int[] latestFingerIDList = new int[MAX_FINGER_ID];
-    private int latestFingerInList = -1;
     private String recentClick = "";
     private String[] numberList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
-    Frame mLastFrame;
-    long mLastFrameId;
 
     public LeapMotionListener(mainWindow mWindow, Corrector correctorIn) {
         this.mWindow = mWindow;
@@ -37,9 +32,7 @@ public class LeapMotionListener extends Listener {
 
     @Override
     public void onInit(Controller controller) {
-        System.out.println("Initialized");;
-        // use head mounted display
-//        controller.setPolicy(Controller.PolicyFlag.POLICY_OPTIMIZE_HMD);
+        System.out.println("Initialized");
     }
 
     @Override
@@ -118,22 +111,22 @@ public class LeapMotionListener extends Listener {
                 KeyboardY[index] = bone.nextJoint().getZ();
                 if (mFingerPosY.containsKey(finger.id())) {
 
-                    float lastPos = mFingerPosY.get(finger.id());
-                    float presentPos = bone.nextJoint().getY();
-                    float distanceY = Math.abs(lastPos - presentPos);
+                    double lastPosY = mFingerPosY.get(finger.id());
+                    double presentPosY = bone.nextJoint().getY();
+                    double distanceY = Math.abs(lastPosY - presentPosY);
 
                     Vector lastPos2 = mFingerPos.get(finger.id());
                     Vector presentPos2 = bone.nextJoint();
-                    float distance2 = lastPos2.distanceTo(presentPos2);
+                    double distance2 = lastPos2.distanceTo(presentPos2);
 
-                    if (Math.abs(lastPos - presentPos) > 1 && (distanceY / distance2) > 0.9)
-//                    System.out.println("distance:" + (lastPos - presentPos) +
-//                            ", percentage: " + (distanceY / distance2));
+                    double diffY = presentPosY - lastPosY;
+                    double percentageY = distanceY / distance2;
+
                     if (mFingerStatus.get(finger.id())) { // 已经点击按下
                         push[index] = true;
                         int risingTime = mFingerRising.get(finger.id());
-                        if (presentPos - lastPos > RISE_DISTANCE && (distanceY / distance2) > RISE_PERCENTAGE) { // 更新为按下
-                            if (risingTime >= RISE_TIME) {
+                        if (diffY > RISE_DISTANCE && percentageY > RISE_PERCENTAGE) { // 更新为松开
+                            if (risingTime >= RISE_TIME) {  //判断上移已经持续帧数（时间）
                                 push[index] = false;
                                 mFingerStatus.put(finger.id(), false);
                                 mWindow.releaseKey(recentClick);
@@ -145,8 +138,8 @@ public class LeapMotionListener extends Listener {
                     } else { // 未点击按下
                         push[index] = false;
                         int descendingTime = mFingerDescending.get(finger.id());
-                        if (lastPos - presentPos > DESCEND_DISTANCE && (distanceY / distance2) > DESCEND_PERCENTAGE) { // 更新为按下
-                            if (descendingTime >= DESCEND_TIME) {
+                        if (-diffY > DESCEND_DISTANCE && percentageY > DESCEND_PERCENTAGE) { // 更新为按下
+                            if (descendingTime >= DESCEND_TIME) {   //判断下降已经持续帧数（时间）
                                 mWindow.releaseKey(recentClick);
                                 push[index] = true;
                                 mFingerStatus.put(finger.id(), true);

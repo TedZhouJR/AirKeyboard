@@ -44,8 +44,8 @@ class TextPanel extends JPanel {
         int pos = area.getCaretPosition();
         String text = area.getText();
         int wordLen = lastWord.length();
-        area.replaceRange(word, pos - wordLen, pos);
-        area.setCaretPosition(pos - wordLen + word.length());
+        area.replaceRange(word + " ", pos - wordLen, pos);
+        area.setCaretPosition(pos - wordLen + word.length() + 1);
     }
 
     String[] moveCursor(boolean isLeft){

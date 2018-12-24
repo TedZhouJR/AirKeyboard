@@ -131,7 +131,7 @@ public class Corrector {
 			wordlist[d] = "";
 		}
 		if (mwin.inputWord.length() < 1) {
-			wordlist[0] = "";
+			wordlist[0] = getBigValue(arg).toLowerCase();
 			return wordlist;
 		}
 		String xc = mwin.prefixWord.toLowerCase();
@@ -145,7 +145,7 @@ public class Corrector {
 				collection1.clear();
 				collection2.clear();
 			}
-			wordlist[0] = mwin.inputWord + getBigValue(arg);
+			wordlist[0] = mwin.inputWord + getBigValue(arg).toLowerCase();
 		} else {
 			String word = mwin.inputWord.toLowerCase();
 			buildOc(word, collection1);
@@ -192,6 +192,7 @@ public class Corrector {
 			for (int ic=0; ic <10 ;ic++) {
 				wordlist[ic] = "";
 			}
+			wordlist[0] = x.toLowerCase();
 			//System.out.println(x + " NULL");
 			mwin.pushKey(x, wordlist);
 			return;

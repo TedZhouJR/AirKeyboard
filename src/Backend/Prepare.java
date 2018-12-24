@@ -55,8 +55,9 @@ public class Prepare {
 	public static void main(String[] args) {
 		map.put("map1",0.0);
 		map2.put("map2",0.0);
-		dealWith("src2.txt");
 		dealWith("src1.txt");
+		dealWith("src2.txt");
+		dealWith("src3.txt");
 		try {
 			FileOutputStream fos=new FileOutputStream("dst.txt");
 	        ObjectOutputStream objectOutputStream=new ObjectOutputStream(fos);

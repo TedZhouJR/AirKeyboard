@@ -155,6 +155,7 @@ public class mainWindow extends JFrame{
             inputWord = "";
             prefixWord = "";
             candidatePanel.setWordlist(null);
+            return null;
         }
         Map<String, Double> prob_dict = new HashMap<>();
         return corrector.setList(prob_dict, this);

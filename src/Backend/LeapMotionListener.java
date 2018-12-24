@@ -22,7 +22,7 @@ public class LeapMotionListener extends Listener {
     Map<Integer, Boolean> mFingerStatus;
     Map<Integer, Vector> mFingerPos;
     private int[] descendingList = new int[MAX_FINGER_ID], risingList = new int[MAX_FINGER_ID];
-//    private int descending = 0, rising = 0;
+    //    private int descending = 0, rising = 0;
     private static final int MAX_DESCEND = 6, MAX_RISE = 4;
     private static final int DESCEND_DISTANCE = 8, RISE_DISTANCE = 7;
     private static final double VERTICAL_MOVING_RATE = 0.4;
@@ -87,6 +87,7 @@ public class LeapMotionListener extends Listener {
             }
         }
         recentClick = nearestNine[0];
+        System.out.println(recentClick);
         for (String number:numberList) {
             if (nearestNine[0].equals(number)) {
                 mWindow.pushKey(nearestNine[0], null);
@@ -97,7 +98,6 @@ public class LeapMotionListener extends Listener {
             mWindow.pushKey(nearestNine[0], null);
             return;
         }
-        System.out.println("Calculate!");
         double tot_distance = 0.0;
         for (int i = 0; i < 9; i++) {
             tot_distance += 1 / distance[i];

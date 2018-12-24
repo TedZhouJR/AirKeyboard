@@ -94,7 +94,7 @@ public class mainWindow extends JFrame{
             else{
                 String text = textPanel.getText();
                 String[] preWords = text.split(" +");
-                if(preWords.length > 2){
+                if(preWords.length >= 2){
                     inputWord = preWords[preWords.length - 1];
                     prefixWord = preWords[preWords.length - 2];
                 }
@@ -132,5 +132,9 @@ public class mainWindow extends JFrame{
         System.out.println(KeyPanel.keyY.length);
         glassPanel.update(37, centerX, centerY, new boolean[37]);
         glassPanel.repaint();
+    }
+
+    public void moveCursor(){
+        textPanel.moveCursor();
     }
 }

@@ -146,12 +146,12 @@ public class LeapMotionListener extends Listener {
             double diffSwipePosX = tmpSwipePosX - swipPosX;
             if (diffSwipePosX > SWIP_UNIT) {
                 //光标右移动
-                //...TODO 通知前端
+                mWindow.moveCursor(false);
                 System.out.println("Move right a unit");
                 swipPosX = tmpSwipePosX;
             } else if (diffSwipePosX < -SWIP_UNIT) {
                 //光标左移动
-                //...TODO 通知前端
+                mWindow.moveCursor(true);
                 System.out.println("Move left a unit");
                 swipPosX = tmpSwipePosX;
             }

@@ -85,7 +85,7 @@ public class mainWindow extends JFrame{
             textPanel.backSpace();
             if(inputWord.length() > 0) {
                 int length = inputWord.length() - 1;
-                inputWord = inputWord.substring(0, length);
+                inputWord = "" + inputWord.substring(0, length);
                 if(inputWord.equals("")){
                     candidatePanel.setWordlist(null);
                     return;
@@ -94,12 +94,12 @@ public class mainWindow extends JFrame{
             else{
                 String text = textPanel.getText();
                 String[] preWords = text.split(" +");
-                if(preWords.length > 2){
-                    inputWord = preWords[preWords.length - 1];
-                    prefixWord = preWords[preWords.length - 2];
+                if(preWords.length >= 2){
+                    inputWord = "" + preWords[preWords.length - 1];
+                    prefixWord = "" + preWords[preWords.length - 2];
                 }
                 else if(preWords.length == 1){
-                    inputWord = preWords[0];
+                    inputWord = "" + preWords[0];
                     prefixWord = "";
                 }
                 else{

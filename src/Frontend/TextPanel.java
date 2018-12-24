@@ -48,6 +48,8 @@ class TextPanel extends JPanel {
 
     void moveCursor(){
         int pos = area.getCaretPosition();
-        area.setCaretPosition(pos - 1);
+        if(pos > 0) {
+            area.setCaretPosition(pos - 1);
+        }
     }
 }

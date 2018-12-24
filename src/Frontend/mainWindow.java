@@ -136,9 +136,11 @@ public class mainWindow extends JFrame{
 
     public void moveCursor(boolean isLeft){
         String[] preWords = textPanel.moveCursor(isLeft);
-        String[] newwords = setInputWord(preWords);
-        if(newwords != null){
-            candidatePanel.setWordlist(newwords);
+        if(preWords != null) {
+            String[] newwords = setInputWord(preWords);
+            if (newwords != null) {
+                candidatePanel.setWordlist(newwords);
+            }
         }
     }
 

@@ -162,7 +162,7 @@ public class LeapMotionListener extends Listener {
         if (rightPalmDirection == null) {
             return;
         }
-        if (rightPalmDirection.angleTo(upDirection) > degree2rad(70) && rightPalmDirection.angleTo(upDirection) < degree2rad(110)) {
+        if (rightPalmDirection.angleTo(upDirection) > degree2rad(65) && rightPalmDirection.angleTo(upDirection) < degree2rad(115)) {
             //右手手掌方向在水平面内
             if (!isDeleting) {
                 if (rightPalmDirection.angleTo(leftDirection) < degree2rad(25)) {

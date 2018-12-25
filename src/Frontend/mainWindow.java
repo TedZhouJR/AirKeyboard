@@ -82,6 +82,7 @@ public class mainWindow extends JFrame{
         }
         else {
             // BackSpace operation
+            // TODO: 解决多次backspace后候选单词比显示单词少一位的情况
             textPanel.backSpace();
             if(inputWord.length() > 0) {
                 int length = inputWord.length() - 1;

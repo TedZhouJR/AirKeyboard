@@ -43,12 +43,12 @@ public class ContentPanel extends JComponent {
         fingerLocation.get(0).setLocation(X, 650);
     }
 
-    void deleteGesture(int X, double angle, ImageIcon toDraw){
+    void deleteGesture(double angle, ImageIcon toDraw){
         this.gesture = mainWindow.DELETE;
         this.toDraw = toDraw;
         this.fingerNum = 1;
         this.angle = -angle;
-        fingerLocation.get(0).setLocation(X, 650);
+        fingerLocation.get(0).setLocation(800, 650);
     }
 
     private void drawGesture(Graphics2D g){

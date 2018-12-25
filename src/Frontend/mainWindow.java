@@ -78,7 +78,7 @@ public class mainWindow extends JFrame{
                 glassPanel.moveGesture((int) (((X[0] + 135.0) / 270.0) * 1000), moveCursorIcon);
                 break;
             case DELETE:
-                glassPanel.deleteGesture((int) (((X[0] + 135.0) / 270.0) * 1000), (double)Y[0], deleteIcon);
+                glassPanel.deleteGesture((double)Y[0], deleteIcon);
                 break;
             default:
                 break;

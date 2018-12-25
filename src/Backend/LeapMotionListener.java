@@ -166,8 +166,8 @@ public class LeapMotionListener extends Listener {
         }
         if (rightPalmDirection.angleTo(upDirection) > degree2rad(65) && rightPalmDirection.angleTo(upDirection) < degree2rad(115)) {
             //右手手掌方向在水平面内
-//          float x[] = {tmpSwipePosX};
-//          mWindow.update(0, ); //TODO
+            float y[] = {rightPalmDirection.angleTo(leftDirection)};
+            mWindow.update(0, null, y, null, mainWindow.DELETE);
             if (!isDeleting) {
                 if (rightPalmDirection.angleTo(leftDirection) < degree2rad(25)) {
                     isDeleting = true;
@@ -176,7 +176,7 @@ public class LeapMotionListener extends Listener {
             } else {
                 if (rightPalmDirection.angleTo(inDirection) < degree2rad(35)) {
                     //删除一个字母
-                    mWindow.pushKey("Backspace", null);
+                    mWindow.backSpace();
                     System.out.println("Delete");
                     isDeleting = false;
                 }

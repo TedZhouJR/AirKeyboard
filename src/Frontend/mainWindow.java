@@ -78,7 +78,7 @@ public class mainWindow extends JFrame{
                 glassPanel.moveGesture((int) (((X[0] + 135.0) / 270.0) * 1000), moveCursorIcon);
                 break;
             case DELETE:
-                glassPanel.moveGesture((int) (((X[0] + 135.0) / 270.0) * 1000), deleteIcon);
+                glassPanel.deleteGesture((int) (((X[0] + 135.0) / 270.0) * 1000), (double)Y[0], deleteIcon);
                 break;
             default:
                 break;
@@ -107,37 +107,7 @@ public class mainWindow extends JFrame{
         else {
             // BackSpace operation
             // TODO: 解决多次backspace后候选单词比显示单词少一位的情况
-            textPanel.backSpace();
-            if(inputWord.length() > 0) {
-                int length = inputWord.length() - 1;
-                inputWord = inputWord.substring(0, length);
-                if(inputWord.equals("")){
-                    candidatePanel.setWordlist(null);
-                    return;
-                }
-            }
-            else{
-                String text = textPanel.getText();
-                String[] preWords = text.split(" +");
-                if(preWords.length >= 2){
-                    inputWord = preWords[preWords.length - 1];
-                    prefixWord = preWords[preWords.length - 2];
-                }
-                else if(preWords.length == 1){
-                    inputWord = preWords[0];
-                    prefixWord = "";
-                }
-                else{
-                    inputWord = "";
-                    prefixWord = "";
-                    candidatePanel.setWordlist(null);
-                    return;
-                }
-            }
-            String lastKey = Character.toString(inputWord.charAt(inputWord.length() - 1));
-            Map<String, Double> prob_dict = new HashMap<>();
-            String[] newwords = corrector.setList(prob_dict, this);
-            candidatePanel.setWordlist(newwords);               // 显示候选单词
+            backSpace();
         }
     }
 
@@ -186,5 +156,39 @@ public class mainWindow extends JFrame{
         }
         Map<String, Double> prob_dict = new HashMap<>();
         return corrector.setList(prob_dict, this);
+    }
+
+    public void backSpace(){
+        textPanel.backSpace();
+        if(inputWord.length() > 0) {
+            int length = inputWord.length() - 1;
+            inputWord = inputWord.substring(0, length);
+            if(inputWord.equals("")){
+                candidatePanel.setWordlist(null);
+                return;
+            }
+        }
+        else{
+            String text = textPanel.getText();
+            String[] preWords = text.split(" +");
+            if(preWords.length >= 2){
+                inputWord = preWords[preWords.length - 1];
+                prefixWord = preWords[preWords.length - 2];
+            }
+            else if(preWords.length == 1){
+                inputWord = preWords[0];
+                prefixWord = "";
+            }
+            else{
+                inputWord = "";
+                prefixWord = "";
+                candidatePanel.setWordlist(null);
+                return;
+            }
+        }
+        String lastKey = Character.toString(inputWord.charAt(inputWord.length() - 1));
+        Map<String, Double> prob_dict = new HashMap<>();
+        String[] newwords = corrector.setList(prob_dict, this);
+        candidatePanel.setWordlist(newwords);               // 显示候选单词
     }
 }

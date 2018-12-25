@@ -10,6 +10,7 @@ public class ContentPanel extends JComponent {
     private boolean[] push;
     private int gesture;
     private ImageIcon toDraw;
+    private double angle;
 
     ContentPanel(){
         super();
@@ -21,6 +22,7 @@ public class ContentPanel extends JComponent {
         push = new boolean[37];                          // show center DEBUG
         this.gesture = -1;
         this.toDraw = null;
+        this.angle = 0;
     }
 
     void update(int num, int[] Xs, int[] Ys, boolean[] push){
@@ -38,26 +40,28 @@ public class ContentPanel extends JComponent {
         this.gesture = mainWindow.MOVECURSOR;
         this.toDraw = toDraw;
         this.fingerNum = 1;
-        fingerLocation.get(0).setLocation(X, 450);
+        fingerLocation.get(0).setLocation(X, 650);
     }
 
-    void deleteGesture(int X, ImageIcon toDraw){
+    void deleteGesture(int X, double angle, ImageIcon toDraw){
         this.gesture = mainWindow.DELETE;
         this.toDraw = toDraw;
         this.fingerNum = 1;
-        fingerLocation.get(0).setLocation(X, 450);
+        this.angle = -angle;
+        fingerLocation.get(0).setLocation(X, 650);
     }
 
-    private void drawGesture(Graphics g){
+    private void drawGesture(Graphics2D g){
         float width = toDraw.getIconWidth();
         float height = toDraw.getIconHeight();
-        g.drawImage(toDraw.getImage(), fingerLocation.get(0).getX(), fingerLocation.get(0).getY(),
+        g.drawImage(toDraw.getImage(), -25, -200,
                   50, 200, null);
     }
 
     @Override
     public void paint(Graphics g){
         //System.out.println("Paint");
+        Graphics2D g2 = (Graphics2D) g;
         switch (gesture) {
             case mainWindow.DEFAULT:
                 for (int i = 0; i < fingerNum; i++) {
@@ -76,11 +80,17 @@ public class ContentPanel extends JComponent {
                 break;
             case mainWindow.DELETE:
                 System.out.println("DELETE GESTURE");
-                drawGesture(g);
+                g2.translate(fingerLocation.get(0).getX(), fingerLocation.get(0).getY());
+                g2.rotate(this.angle);
+                drawGesture(g2);
+                g2.rotate(-this.angle);
+                g2.translate(-fingerLocation.get(0).getX(), fingerLocation.get(0).getY());
                 break;
             case mainWindow.MOVECURSOR:
                 System.out.println("MOVECURSOR");
-                drawGesture(g);
+                g2.translate(fingerLocation.get(0).getX(), fingerLocation.get(0).getY());
+                drawGesture(g2);
+                g2.translate(-fingerLocation.get(0).getX(), fingerLocation.get(0).getY());
                 break;
             default:
                 break;

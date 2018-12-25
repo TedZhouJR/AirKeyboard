@@ -135,6 +135,10 @@ public class LeapMotionListener extends Listener {
         if (leftPalmDirection.angleTo(rightDirection) < degree2rad(25) && leftPalmDirection.angleTo(leftIndexDirection) > degree2rad(70) &&
                 leftPalmDirection.angleTo(leftIndexDirection) < degree2rad(110) ) {
             gestureCDCounter = 0;
+            float tmpSwipePosX = leftRefereeBone.nextJoint().getX();
+            double diffSwipePosX = tmpSwipePosX - swipPosX;
+            float x[] = {tmpSwipePosX};
+            mWindow.update(0, x, null, null, mainWindow.MOVECURSOR);
             //左手竖直且张开
             if (!isGesturing) {
                 swipPosX = leftRefereeBone.nextJoint().getX();
@@ -142,11 +146,8 @@ public class LeapMotionListener extends Listener {
                 return;
             }
             isGesturing = true;
-            double tmpSwipePosX = leftRefereeBone.nextJoint().getX();
-            double diffSwipePosX = tmpSwipePosX - swipPosX;
             if (diffSwipePosX > SWIP_UNIT) {
                 //光标右移动
-                mWindow.update();
                 mWindow.moveCursor(false);
                 System.out.println("Move right a unit");
                 swipPosX = tmpSwipePosX;
@@ -165,6 +166,8 @@ public class LeapMotionListener extends Listener {
         }
         if (rightPalmDirection.angleTo(upDirection) > degree2rad(65) && rightPalmDirection.angleTo(upDirection) < degree2rad(115)) {
             //右手手掌方向在水平面内
+//          float x[] = {tmpSwipePosX};
+//          mWindow.update(0, ); //TODO
             if (!isDeleting) {
                 if (rightPalmDirection.angleTo(leftDirection) < degree2rad(25)) {
                     isDeleting = true;
@@ -173,7 +176,6 @@ public class LeapMotionListener extends Listener {
             } else {
                 if (rightPalmDirection.angleTo(inDirection) < degree2rad(35)) {
                     //删除一个字母
-                    mWindow.update(0);
                     mWindow.pushKey("Backspace", null);
                     System.out.println("Delete");
                     isDeleting = false;

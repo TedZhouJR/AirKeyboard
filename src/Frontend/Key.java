@@ -1,5 +1,5 @@
 package Frontend;
-import javax.swing.JLabel;
+import javax.swing.*;
 import java.awt.*;
 
 class Key extends JLabel{

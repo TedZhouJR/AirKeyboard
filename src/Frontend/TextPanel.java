@@ -7,17 +7,22 @@ class TextPanel extends JPanel {
     private JTextArea area;
     TextPanel(){
         super();
-        Font areaFont = new Font("Times New Roman",Font.PLAIN,20);
+        Font areaFont = new Font("Times New Roman",Font.PLAIN,25);
         area = new JTextArea();
-        area.setBackground(Color.lightGray);
+        Color areaColor = new Color(70, 90, 107);
+        area.setBackground(areaColor);
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
         area.setVisible(true);
         area.setFont(areaFont);
+        area.setBorder(BorderFactory.createLineBorder(areaColor));
+        area.setForeground(Color.WHITE);
         JScrollPane areaScrollPane = new JScrollPane(area);
         areaScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        areaScrollPane.setPreferredSize(new Dimension(900, 270));
+        areaScrollPane.setBackground(areaColor);
+        areaScrollPane.setPreferredSize(new Dimension(900, 290));
+        areaScrollPane.setBorder(BorderFactory.createLineBorder(areaColor));
         this.add(areaScrollPane);
     }
 

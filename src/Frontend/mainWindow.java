@@ -31,18 +31,22 @@ public class mainWindow extends JFrame{
         this.corrector = corrector;
         Xs = new int[10];
         Ys = new int[10];
+        Color panelColor = new Color(42, 62, 80);
         moveCursorIcon = new ImageIcon(moveCursorPath);
         deleteIcon = new ImageIcon(deletePath);
-        keyPanel = new KeyPanel();
+        keyPanel = new KeyPanel(panelColor);
         // keyPanel.setBackground(Color.blue);  // DEBUG
         keyPanel.setPreferredSize(new Dimension(1000, 400));
+        keyPanel.setBackground(panelColor);
         textPanel = new TextPanel();
         // textPanel.setBackground(Color.RED);   // DEBUG
         textPanel.setPreferredSize(new Dimension(1000, 300));
+        textPanel.setBackground(panelColor);
         candidatePanel = new CandidatePanel();
-        candidatePanel.setPreferredSize(new Dimension(1000, 50));
+        candidatePanel.setPreferredSize(new Dimension(1000, 60));
+        candidatePanel.setBackground(panelColor);
         JPanel contentPanel = (JPanel)this.getContentPane();
-        contentPanel.setSize(1000, 750);
+        contentPanel.setSize(1000, 760);
         contentPanel.add(keyPanel, BorderLayout.SOUTH);
         contentPanel.add(candidatePanel, BorderLayout.CENTER);
         contentPanel.add(textPanel, BorderLayout.NORTH);

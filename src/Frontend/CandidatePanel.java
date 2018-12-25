@@ -19,6 +19,7 @@ public class CandidatePanel extends JPanel {
         Dimension wordSize = new Dimension(98, 50);
         Font wordFont = new Font("Times New Roman", Font.PLAIN, 14);
         Dimension rigid = new Dimension(2, 0);
+        Color labelColor = new Color(63, 81, 98);
         for(int i = 0; i < 10; i++){
             labelWord[i] = new JLabel();
             labelWord[i].setOpaque(true);
@@ -27,7 +28,9 @@ public class CandidatePanel extends JPanel {
             labelWord[i].setMaximumSize(wordSize);
             labelWord[i].setMinimumSize(wordSize);
             labelWord[i].setFont(wordFont);
-            labelWord[i].setBackground(Color.PINK);
+            labelWord[i].setBackground(labelColor);
+            System.out.printf("%d, %d, %d\n", Color.GRAY.getRed(), Color.GRAY.darker().getRed(), Color.DARK_GRAY.getRed());
+            labelWord[i].setForeground(Color.WHITE);
             this.add(labelWord[i]);
             this.add(Box.createRigidArea(rigid));
         }

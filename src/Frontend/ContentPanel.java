@@ -11,6 +11,8 @@ public class ContentPanel extends JComponent {
     private int gesture;
     private ImageIcon toDraw;
     private double angle;
+    private ImageIcon click;
+    private ImageIcon unclick;
 
     ContentPanel(){
         super();
@@ -23,13 +25,15 @@ public class ContentPanel extends JComponent {
         this.gesture = -1;
         this.toDraw = null;
         this.angle = 0;
+        click = new ImageIcon("./resource/click.png");
+        unclick = new ImageIcon("./resource/float.png");
     }
 
     void update(int num, int[] Xs, int[] Ys, boolean[] push){
         //System.out.println("Glass update");
         fingerNum = num;
         for (int i = 0; i < num; i++){
-            fingerLocation.get(i).setLocation(Xs[i], Ys[i] + 350);
+            fingerLocation.get(i).setLocation(Xs[i], Ys[i] + 360);
             this.push[i] = push[i];
         }
         this.gesture = mainWindow.DEFAULT;
@@ -40,7 +44,7 @@ public class ContentPanel extends JComponent {
         this.gesture = mainWindow.MOVECURSOR;
         this.toDraw = toDraw;
         this.fingerNum = 1;
-        fingerLocation.get(0).setLocation(X, 650);
+        fingerLocation.get(0).setLocation(X, 660);
     }
 
     void deleteGesture(double angle, ImageIcon toDraw){
@@ -48,7 +52,7 @@ public class ContentPanel extends JComponent {
         this.toDraw = toDraw;
         this.fingerNum = 1;
         this.angle = -angle;
-        fingerLocation.get(0).setLocation(800, 650);
+        fingerLocation.get(0).setLocation(800, 660);
     }
 
     private void drawGesture(Graphics2D g){
@@ -69,11 +73,10 @@ public class ContentPanel extends JComponent {
                     int y = fingerLocation.get(i).getY();
                     if (y >= 300) {
                         if (!push[i]) {
-                            g.setColor(Color.RED);
+                            g.drawImage(unclick.getImage(), x - 10, y - 10, 20, 20, null);
                         } else {
-                            g.setColor(Color.YELLOW);
+                            g.drawImage(click.getImage(), x - 10, y - 10, 20, 20, null);
                         }
-                        g.fillOval(x - 8, y - 8, 16, 16);
                         // System.out.printf("(%d, %d)\n", x, y);
                     }
                 }

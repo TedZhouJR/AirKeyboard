@@ -9,6 +9,7 @@ class TextPanel extends JPanel {
         super();
         Font areaFont = new Font("Times New Roman",Font.PLAIN,20);
         area = new JTextArea();
+        area.setBackground(Color.lightGray);
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
         area.setVisible(true);

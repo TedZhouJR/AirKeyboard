@@ -18,7 +18,7 @@ public class KeyPanel extends JPanel {
                                         117, 202, 287, 372, 457, 542, 627, 712, 797, 882,
                                         160, 245, 330, 415, 500, 585, 670, 755, 840,
                                         245, 330, 415, 500, 585, 670, 755, 925};
-    KeyPanel(){
+    KeyPanel(Color panelColor){
         super();
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         Dimension panelDimension = new Dimension(800, 80);
@@ -42,10 +42,18 @@ public class KeyPanel extends JPanel {
         this.add(middle);
         this.add(Box.createRigidArea(rigidBetweenPanel));
         this.add(bottom);
+        /*
+        set background color for panel
+         */
+        numPanel.setBackground(panelColor);
+        top.setBackground(panelColor);
+        middle.setBackground(panelColor);
+        bottom.setBackground(panelColor);
+
         keys = new Key[37];
         Dimension keyDimension = new Dimension(80, 80);       // 键盘大小 80 × 80
         Dimension rigidBoxDimension = new Dimension(5, 0);    // 键盘之间横向间隔 5像素
-        Font keyFont = new Font("Times New Roman", Font.PLAIN, 18);
+        Font keyFont = new Font("Times New Roman", Font.PLAIN, 20);
         for (int i = 0; i < 36; i++){
             keys[i] = new Key(keynum[i]);
             keys[i].setHorizontalAlignment(SwingConstants.CENTER);
@@ -84,7 +92,7 @@ public class KeyPanel extends JPanel {
         keys[36].setPreferredSize(backspaceDimen);
         keys[36].setMinimumSize(backspaceDimen);
         keys[36].setMaximumSize(backspaceDimen);
-        keys[36].setFont(new Font("Times New Roman", Font.PLAIN, 18));
+        keys[36].setFont(new Font("Times New Roman", Font.PLAIN, 20));
         numPanel.add(Box.createRigidArea(rigidBoxDimension));
         numPanel.add(keys[36]);
     }

@@ -5,11 +5,13 @@ import java.awt.*;
 class Key extends JLabel{
     private String strKeyNum;
     private boolean boolPushed;
+    private Color normal;
     private Color current;
     Key(String key){
         boolPushed = false;
         strKeyNum = key;
-        current = new Color(101, 118, 133);
+        normal = new Color(101, 118, 133);
+        current = normal;
         this.setBackground(current);
         this.setForeground(Color.WHITE);
         this.setOpaque(true);
@@ -27,7 +29,7 @@ class Key extends JLabel{
     
     private void beRealsed(){
         // this.setBackground(Color.GRAY);
-        current = current.brighter();
+        current = normal;
         this.setBackground(current);
         boolPushed = false;
         repaint();

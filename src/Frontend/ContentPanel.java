@@ -58,8 +58,8 @@ public class ContentPanel extends JComponent {
     private void drawGesture(Graphics2D g){
         float width = toDraw.getIconWidth();
         float height = toDraw.getIconHeight();
-        g.drawImage(toDraw.getImage(), -25, -200,
-                  50, 200, null);
+        g.drawImage(toDraw.getImage(), -40, -200,
+                  80, 200, null);
     }
 
     @Override

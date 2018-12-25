@@ -16,11 +16,23 @@ public class mainWindow extends JFrame{
     private Corrector corrector;
     private int[] Xs;
     private int[] Ys;
+    /* 定义不同的手势对应的数字序号用于update函数 */
+    public final static int DEFAULT = 0;
+    public final static int MOVECURSOR = 1;
+    public final static int DELETE = 2;
+    private final static String moveCursorPath = "./resource/moveCursor.png";
+    private final static String deletePath = "./resource/delete.png";
+
+    private ImageIcon moveCursorIcon;
+    private ImageIcon deleteIcon;
+
     public mainWindow(String windowName, Corrector corrector){
         super(windowName);
         this.corrector = corrector;
         Xs = new int[10];
         Ys = new int[10];
+        moveCursorIcon = new ImageIcon(moveCursorPath);
+        deleteIcon = new ImageIcon(deletePath);
         keyPanel = new KeyPanel();
         // keyPanel.setBackground(Color.blue);  // DEBUG
         keyPanel.setPreferredSize(new Dimension(1000, 400));
@@ -49,16 +61,28 @@ public class mainWindow extends JFrame{
         setVisible(true);
     }
 
-    public void update(int num, float[] X, float[] Y, boolean[] push, String target){
+    public void update(int num, float[] X, float[] Y, boolean[] push, int gesture){
         // System.out.println("Begin update");
-        for(int i = 0; i < num; i++){
-            // 用于float的坐标变换到电脑上的像素点坐标，目前是将400mm × 120mm大小虚拟键盘映射到小键盘上
-            // 然后将坐标中心从键盘中间平移到左上角，以正常显示
-            // TODO: 键盘可现实点的像素大小变为1000 × 400，键盘坐标应该如何改动？
-            Xs[i] = (int)(((X[i] + 135.0) / 270.0) * 1000);
-            Ys[i] = (int)(((Y[i] + 50.0) / 100.0) * 300);
+        switch (gesture) {
+            case DEFAULT:
+                for (int i = 0; i < num; i++) {
+                    // 用于float的坐标变换到电脑上的像素点坐标，目前是将400mm × 120mm大小虚拟键盘映射到小键盘上
+                    // 然后将坐标中心从键盘中间平移到左上角，以正常显示
+                    // TODO: 键盘可现实点的像素大小变为1000 × 400，键盘坐标应该如何改动？
+                    Xs[i] = (int) (((X[i] + 135.0) / 270.0) * 1000);
+                    Ys[i] = (int) (((Y[i] + 50.0) / 100.0) * 300);
+                }
+                glassPanel.update(num, Xs, Ys, push);
+                break;
+            case MOVECURSOR:
+                glassPanel.moveGesture((int) (((X[0] + 135.0) / 270.0) * 1000), moveCursorIcon);
+                break;
+            case DELETE:
+                glassPanel.moveGesture((int) (((X[0] + 135.0) / 270.0) * 1000), deleteIcon);
+                break;
+            default:
+                break;
         }
-        glassPanel.update(num, Xs, Ys, push);
         glassPanel.repaint();
     }
 

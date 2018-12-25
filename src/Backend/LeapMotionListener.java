@@ -146,6 +146,7 @@ public class LeapMotionListener extends Listener {
             double diffSwipePosX = tmpSwipePosX - swipPosX;
             if (diffSwipePosX > SWIP_UNIT) {
                 //光标右移动
+                mWindow.update();
                 mWindow.moveCursor(false);
                 System.out.println("Move right a unit");
                 swipPosX = tmpSwipePosX;
@@ -172,6 +173,7 @@ public class LeapMotionListener extends Listener {
             } else {
                 if (rightPalmDirection.angleTo(inDirection) < degree2rad(35)) {
                     //删除一个字母
+                    mWindow.update(0);
                     mWindow.pushKey("Backspace", null);
                     System.out.println("Delete");
                     isDeleting = false;
@@ -252,7 +254,7 @@ public class LeapMotionListener extends Listener {
             }
         }
 
-        mWindow.update(fingerNum, KeyboardX, KeyboardY, push, null);
+        mWindow.update(fingerNum, KeyboardX, KeyboardY, push, mainWindow.DEFAULT);
 
         // 去除map中不合法id
         for (int key : mFingerPosY.keySet()) {

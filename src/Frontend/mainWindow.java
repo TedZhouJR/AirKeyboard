@@ -16,18 +16,23 @@ public class mainWindow extends JFrame{
     private Corrector corrector;
     private int[] Xs;
     private int[] Ys;
-    /* 定义不同的手势对应的数字序号用于update函数 */
+    public int keyBoardState;
+    /* 定义不同的常量 */
     public final static int DEFAULT = 0;
     public final static int MOVECURSOR = 1;
     public final static int DELETE = 2;
     private final static String moveCursorPath = "./resource/moveCursor.png";
     private final static String deletePath = "./resource/delete.png";
+    /*对应键盘的不同状态 */
+    public final static int QWERTY = 0;
+    public final static int NUMBER = 1;
 
     private ImageIcon moveCursorIcon;
     private ImageIcon deleteIcon;
 
     public mainWindow(String windowName, Corrector corrector){
         super(windowName);
+        keyBoardState = 0;
         this.corrector = corrector;
         Xs = new int[10];
         Ys = new int[10];
@@ -36,17 +41,17 @@ public class mainWindow extends JFrame{
         deleteIcon = new ImageIcon(deletePath);
         keyPanel = new KeyPanel(panelColor);
         // keyPanel.setBackground(Color.blue);  // DEBUG
-        keyPanel.setPreferredSize(new Dimension(1000, 400));
+        keyPanel.setPreferredSize(new Dimension(1000, 300));
         keyPanel.setBackground(panelColor);
         textPanel = new TextPanel();
         // textPanel.setBackground(Color.RED);   // DEBUG
         textPanel.setPreferredSize(new Dimension(1000, 300));
         textPanel.setBackground(panelColor);
         candidatePanel = new CandidatePanel();
-        candidatePanel.setPreferredSize(new Dimension(1000, 60));
+        candidatePanel.setPreferredSize(new Dimension(1000, 100));
         candidatePanel.setBackground(panelColor);
         JPanel contentPanel = (JPanel)this.getContentPane();
-        contentPanel.setSize(1000, 760);
+        contentPanel.setSize(1000, 700);
         contentPanel.add(keyPanel, BorderLayout.SOUTH);
         contentPanel.add(candidatePanel, BorderLayout.CENTER);
         contentPanel.add(textPanel, BorderLayout.NORTH);
@@ -119,17 +124,17 @@ public class mainWindow extends JFrame{
         keyPanel.releaseKey(target.toUpperCase());
     }
 
-    public void showCenter(){
-        int[] centerX = new int[37];
-        int[] centerY = new int[37];
-        for(int i = 0; i < 37; i++){
+    public void showCenter(int n){
+        int[] centerX = new int[n];
+        int[] centerY = new int[n];
+        for(int i = 0; i < n; i++){
             centerX[i] = (int)KeyPanel.keyX[i];
             centerY[i] = (int)KeyPanel.keyY[i];
             System.out.printf("(%d, %d)\n", centerX[i], centerY[i]);
         }
         System.out.println(KeyPanel.keyX.length);
         System.out.println(KeyPanel.keyY.length);
-        glassPanel.update(37, centerX, centerY, new boolean[37]);
+        glassPanel.update(n, centerX, centerY, new boolean[n]);
         glassPanel.repaint();
     }
 
@@ -195,4 +200,11 @@ public class mainWindow extends JFrame{
         String[] newwords = corrector.setList(prob_dict, this);
         candidatePanel.setWordlist(newwords);               // 显示候选单词
     }
+
+//    public boolean changeState(int state){
+//        keyBoardState = state;
+//        switch (keyBoardState){
+//            case mainWindow.QWERTY
+//        }
+//    }
 }

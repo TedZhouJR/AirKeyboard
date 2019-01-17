@@ -17,11 +17,11 @@ public class ContentPanel extends JComponent {
     ContentPanel(){
         super();
         fingerNum = 0;
-        fingerLocation = new Vector<>(37);   // show center DEBUG
-        for (int i = 0; i < 37; i++){
+        fingerLocation = new Vector<>(33);   // show center DEBUG
+        for (int i = 0; i < 33; i++){
             fingerLocation.add(new Location(0, 0));
         }
-        push = new boolean[37];                          // show center DEBUG
+        push = new boolean[33];                          // show center DEBUG
         this.gesture = -1;
         this.toDraw = null;
         this.angle = 0;
@@ -33,7 +33,7 @@ public class ContentPanel extends JComponent {
         //System.out.println("Glass update");
         fingerNum = num;
         for (int i = 0; i < num; i++){
-            fingerLocation.get(i).setLocation(Xs[i], Ys[i] + 360);
+            fingerLocation.get(i).setLocation(Xs[i], Ys[i] + 300);
             this.push[i] = push[i];
         }
         this.gesture = mainWindow.DEFAULT;
@@ -44,7 +44,7 @@ public class ContentPanel extends JComponent {
         this.gesture = mainWindow.MOVECURSOR;
         this.toDraw = toDraw;
         this.fingerNum = 1;
-        fingerLocation.get(0).setLocation(X, 660);
+        fingerLocation.get(0).setLocation(X, 600);
     }
 
     void deleteGesture(double angle, ImageIcon toDraw){
@@ -52,7 +52,7 @@ public class ContentPanel extends JComponent {
         this.toDraw = toDraw;
         this.fingerNum = 1;
         this.angle = -angle;
-        fingerLocation.get(0).setLocation(800, 660);
+        fingerLocation.get(0).setLocation(800, 600);
     }
 
     private void drawGesture(Graphics2D g){

@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args){
         Corrector conrrector = new Corrector();
         mainWindow mainwindow = new mainWindow("Air Key Board", conrrector);
-        // mainwindow.showCenter();
+        mainwindow.showCenter(33);
 //        int num = 10;             //DEBUG
 //        float [] Xs = new float[10];
 //        float [] Ys = new float[10];

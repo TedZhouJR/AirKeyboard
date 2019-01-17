@@ -20,7 +20,7 @@ public class LeapMotionListener extends Listener {
     private static final int GESTURE_CD_MAX = 50;
     private int gestureCDCounter = 0;
     private double swipPosX = 0.0;
-    private boolean isGesturing = false, isDeleting = false, isSwitching = false;
+    private boolean isGesturing = false, isDeleting = false/*, isSwitching = false*/;
     private String recentClick = "";
     private String[] numberList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
     private static Vector rightDirection = new Vector(1, 0, 0), leftDirection = new Vector(-1, 0, 0),
@@ -130,19 +130,19 @@ public class LeapMotionListener extends Listener {
         }
 
         if (leftIndexDirection != null && leftPalmDirection == null) {
-            // 切换键盘手势判断
-            if (leftPalmDirection.angleTo(upDirection) < degree2rad(30)) {
-                gestureCDCounter = 0;
-                if (!isSwitching) {
-                    isSwitching = true;
-                    System.out.println("Switch Keyboard");
-                }
-            } else if (leftPalmDirection.angleTo(upDirection) > degree2rad(140)) {
-                isSwitching = false;
-            }
-            if (isSwitching) {
-                return;
-            }
+//            // 切换键盘手势判断
+//            if (leftPalmDirection.angleTo(upDirection) < degree2rad(30)) {
+//                gestureCDCounter = 0;
+//                if (!isSwitching) {
+//                    isSwitching = true;
+//                    System.out.println("Switch Keyboard");
+//                }
+//            } else if (leftPalmDirection.angleTo(upDirection) > degree2rad(140)) {
+//                isSwitching = false;
+//            }
+//            if (isSwitching) {
+//                return;
+//            }
 
             // 光标移动判断
             if (leftPalmDirection.angleTo(rightDirection) < degree2rad(25) && leftPalmDirection.angleTo(leftIndexDirection) > degree2rad(70) &&
@@ -182,7 +182,7 @@ public class LeapMotionListener extends Listener {
                 float y[] = {rightPalmDirection.angleTo(leftDirection)};
                 mWindow.update(0, null, y, null, mainWindow.DELETE);
                 if (!isDeleting) {
-                    if (rightPalmDirection.angleTo(leftDirection) < degree2rad(25)) {
+                    if (rightPalmDirection.angleTo(leftDirection) < degree2rad(28)) {
                         isDeleting = true;
                         isGesturing = true;
                     }
@@ -209,7 +209,7 @@ public class LeapMotionListener extends Listener {
                 return;
             }
         }
-        
+
         for (Finger finger : frame.fingers()) {
             if (finger.type() == Finger.Type.TYPE_INDEX) {
                 Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);

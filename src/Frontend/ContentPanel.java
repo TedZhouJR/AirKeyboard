@@ -73,9 +73,9 @@ public class ContentPanel extends JComponent {
                     int y = fingerLocation.get(i).getY();
                     if (y >= 300) {
                         if (!push[i]) {
-                            g.drawImage(unclick.getImage(), x - 10, y - 10, 20, 20, null);
+                            g.drawImage(unclick.getImage(), x - 20, y - 20, 40, 40, null);
                         } else {
-                            g.drawImage(click.getImage(), x - 10, y - 10, 20, 20, null);
+                            g.drawImage(click.getImage(), x - 20, y - 20, 40, 40, null);
                         }
                         // System.out.printf("(%d, %d)\n", x, y);
                     }

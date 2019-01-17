@@ -22,7 +22,8 @@ public class CandidatePanel extends JPanel {
         //Color labelColor = new Color(63, 81, 98);
         this.add(Box.createRigidArea(new Dimension(45, 0)));
         for(int i = 0; i < 6; i++){
-            labelWord[i] = new Key("");
+            labelWord[i] = new Key("n" + i, 27 + i);
+            labelWord[i].setText("");
             labelWord[i].setOpaque(true);
             // labelWord[i].setHorizontalAlignment(SwingConstants.CENTER);
             labelWord[i].setPreferredSize(wordSize);
@@ -40,14 +41,15 @@ public class CandidatePanel extends JPanel {
 
     void setWordlist(String[] words){
         wordlist.removeAllElements();
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 6; i++){
             labelWord[i].setText("");
         }
         if(words != null) {
-            length = (words.length > 10) ? 10 : words.length;
+            length = (words.length > 6) ? 6 : words.length;
             for (int i = 0; i < length; i++) {
                 wordlist.add(words[i]);
-                labelWord[i].setText(Integer.toString(i) + ". " + words[i]);
+                labelWord[i].setHorizontalAlignment(SwingConstants.CENTER);
+                labelWord[i].setText(words[i]);
             }
         }
     }
@@ -59,6 +61,11 @@ public class CandidatePanel extends JPanel {
         }
         wordlist.removeAllElements();
         length = 0;
+        labelWord[num].checkPush("n" + num);
         return word;
+    }
+
+    void releaseKey(int num){
+        labelWord[num].checkRelease("n" + num);
     }
 }

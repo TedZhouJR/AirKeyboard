@@ -8,8 +8,11 @@ public class KeyPanel extends JPanel {
     public static final String[] keynum = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
                                           "A", "S", "D", "F", "G", "H", "J", "K", "L",
                                           "?123", "Z", "X", "C", "V", "B", "N", "M",
-                                            "0", "1", "3", "4", "5", "6"};
-    public static final String[] numberkey = {};
+                                            "n0", "n1", "n2", "n3", "n4", "n5"};
+    public static final String[] numberkey = {"", "", "?", "-", "\"","" , "0", "1", "2", "3",
+                                              "", "", ",", ".", "!", "", "4", "5", "6",
+                                              "ABC", "", "", "'", "", "7", "8", "9",
+                                              "n0", "n1", "n2", "n3", "n4", "n5"};
     //1000*300
     public static final float[] keyY = {50, 50, 50, 50, 50, 50,
                                         165, 165, 165, 165, 165, 165, 165, 165, 165, 165,
@@ -60,7 +63,7 @@ public class KeyPanel extends JPanel {
         Dimension rigidBoxDimension = new Dimension(5, 0);    // 键盘之间横向间隔 5像素
         Font keyFont = new Font("Times New Roman", Font.PLAIN, 20);
         for (int i = 0; i < 27; i++){
-            keys[i] = new Key(keynum[i]);
+            keys[i] = new Key(keynum[i], i);
             keys[i].setHorizontalAlignment(SwingConstants.CENTER);
             keys[i].setPreferredSize(keyDimension);
             keys[i].setMinimumSize(keyDimension);
@@ -103,14 +106,26 @@ public class KeyPanel extends JPanel {
     }
 
     void pushKey(String target){
-        for(int i = 0; i < 37; i++){
+        for(int i = 0; i < 27; i++){
             keys[i].checkPush(target);
         }
     }
 
     void releaseKey(String target){
-        for(int i = 0; i < 37; i++){
+        for(int i = 0; i < 27; i++){
             keys[i].checkRelease(target);
+        }
+    }
+
+    void changeToNum(){
+        for(int i = 0; i < 27; i++){
+            keys[i].setKey(KeyPanel.numberkey[i]);
+        }
+    }
+
+    void changeToChar(){
+        for(int i = 0; i < 27; i++){
+            keys[i].setKey(KeyPanel.keynum[i]);
         }
     }
 }

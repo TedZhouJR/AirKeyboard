@@ -7,9 +7,11 @@ class Key extends JLabel{
     private boolean boolPushed;
     private Color normal;
     private Color current;
-    Key(String key){
+    private int keyNum;
+    Key(String key, int num){
         boolPushed = false;
         strKeyNum = key;
+        keyNum = num;
         normal = new Color(101, 118, 133);
         current = normal;
         this.setBackground(current);
@@ -45,9 +47,14 @@ class Key extends JLabel{
     }
 
     void checkRelease(String target){
-        if(target.equals(strKeyNum.toUpperCase())){
+        if(target.equals(KeyPanel.keynum[keyNum].toUpperCase()) || target.equals(KeyPanel.numberkey[keyNum].toUpperCase())){
             this.beRealsed();
         }
+    }
+
+    void setKey(String target){
+        this.strKeyNum = target;
+        this.setText(target);
     }
 
 //    @Override

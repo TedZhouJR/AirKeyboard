@@ -96,31 +96,41 @@ public class mainWindow extends JFrame{
     }
 
     public void pushKey(String target, String[] words){
-        keyPanel.pushKey(target.toUpperCase());
-        {
+        if(!target.equals(KeyPanel.keynum[19]) && !target.equals(KeyPanel.numberkey[19])) {
             int targetLen = target.length();
-            if(targetLen == 1){
+            if(targetLen == 2){
                 char first = target.charAt(0);
-                if((first >= '0') && (first <= '6')){
-                    prefixWord = candidatePanel.chooseWord(Integer.parseInt(target));
+                char second = target.charAt(1);
+                if((second >= '0') && (second <= '6') && (first == 'n')){
+                    prefixWord = candidatePanel.chooseWord(Integer.parseInt(target.substring(1)));
                     textPanel.changeLastWord(prefixWord, inputWord);
                     inputWord = "";
                     return;
                 }
             }
+            keyPanel.pushKey(target.toUpperCase());
             textPanel.inputKey(target.toLowerCase());
             inputWord = inputWord + target.toLowerCase();
             candidatePanel.setWordlist(words);               // 显示候选单词
             // TODO: 如何轮回的显示输入字符，即一个键被一直按下之后应该怎样不间断输出。
         }
-//        else {
-//            // BackSpace operation
-//            // TODO: 解决多次backspace后候选单词比显示单词少一位的情况
-//            backSpace();
-//        }
+        else {
+            // changeState operation
+            // TODO: 解决多次backspace后候选单词比显示单词少一位的情况
+            keyPanel.pushKey(target.toUpperCase());
+            changeState(target);
+        }
     }
 
     public void releaseKey(String target){
+        if(target.length() == 2){
+            char first = target.charAt(0);
+            char second = target.charAt(1);
+            if((second >= '0') && (second <= '6') && (first == 'n')){
+                candidatePanel.releaseKey(Integer.parseInt(target.substring(1)));
+                return;
+            }
+        }
         keyPanel.releaseKey(target.toUpperCase());
     }
 
@@ -201,10 +211,18 @@ public class mainWindow extends JFrame{
         candidatePanel.setWordlist(newwords);               // 显示候选单词
     }
 
-//    public boolean changeState(int state){
-//        keyBoardState = state;
-//        switch (keyBoardState){
-//            case mainWindow.QWERTY
-//        }
-//    }
+    private void changeState(String a){
+        switch (a){
+            case "ABC":
+                keyPanel.changeToChar();
+                keyBoardState = mainWindow.QWERTY;
+                break;
+            case "?123":
+                keyBoardState = mainWindow.NUMBER;
+                keyPanel.changeToNum();
+                break;
+            default:
+                break;
+        }
+    }
 }

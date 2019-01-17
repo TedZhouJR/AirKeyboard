@@ -16,43 +16,9 @@ public class Main {
     public static void main(String[] args){
         Corrector conrrector = new Corrector();
         mainWindow mainwindow = new mainWindow("Air Key Board", conrrector);
-        mainwindow.showCenter(33);
-//        int num = 10;             //DEBUG
-//        float [] Xs = new float[10];
-//        float [] Ys = new float[10];
-//        int gesture = -1;
-//        while(true){
-//            Scanner console = new Scanner(System.in);
-//            System.out.println("Please input gesture");
-//            gesture = console.nextInt();
-//            switch (gesture) {
-//                case mainWindow.DEFAULT:
-//                    System.out.println("Please input num");
-//                    num = console.nextInt();
-//                    System.out.println("Please input location");
-//                    for (int i = 0; i < num; i++) {
-//                        Xs[i] = console.nextFloat();
-//                        Ys[i] = console.nextFloat();
-//                    }
-//                    break;
-//                case mainWindow.MOVECURSOR:
-//                    System.out.println("Please input X");
-//                    Xs[0] = console.nextFloat();
-//                    num = 1;
-//                    break;
-//                case mainWindow.DELETE:
-//                    System.out.println("Please input X");
-//                    Xs[0] = console.nextFloat();
-//                    System.out.println("Please input angle");
-//                    Ys[0] = console.nextFloat();
-//                    num = 1;
-//                    break;
-//                default:
-//                    break;
-//            }
-//            mainwindow.update(num, Xs, Ys, new boolean[10], gesture);
-//        }
-
+//        mainwindow.showCenter(33);
+//        checkGesture(mainwindow);
+        checkChangeState(mainwindow);
         // Create a sample listener and controller
         LeapMotionListener listener = new LeapMotionListener(mainwindow, conrrector);
         Controller controller = new Controller();
@@ -72,4 +38,57 @@ public class Main {
         controller.removeListener(listener);
     }
 
+    static void checkGesture(mainWindow mainwindow){
+        int num = 10;             //DEBUG
+        float [] Xs = new float[10];
+        float [] Ys = new float[10];
+        int gesture = -1;
+        while(true) {
+            Scanner console = new Scanner(System.in);
+            System.out.println("Please input gesture");
+            gesture = console.nextInt();
+            switch (gesture) {
+                case mainWindow.DEFAULT:
+                    System.out.println("Please input num");
+                    num = console.nextInt();
+                    System.out.println("Please input location");
+                    for (int i = 0; i < num; i++) {
+                        Xs[i] = console.nextFloat();
+                        Ys[i] = console.nextFloat();
+                    }
+                    break;
+                case mainWindow.MOVECURSOR:
+                    System.out.println("Please input X");
+                    Xs[0] = console.nextFloat();
+                    num = 1;
+                    break;
+                case mainWindow.DELETE:
+                    System.out.println("Please input X");
+                    Xs[0] = console.nextFloat();
+                    System.out.println("Please input angle");
+                    Ys[0] = console.nextFloat();
+                    num = 1;
+                    break;
+                default:
+                    break;
+            }
+            mainwindow.update(num, Xs, Ys, new boolean[10], gesture);
+        }
+    }
+
+    static void checkChangeState(mainWindow mainwindow){
+        int num = 10;             //DEBUG
+        float [] Xs = new float[10];
+        float [] Ys = new float[10];
+        String push;
+        while(true){
+            Scanner console = new Scanner(System.in);
+            System.out.println("Next character to push: ");
+            push = console.next();
+            mainwindow.pushKey(push, null);
+            System.out.println("Next character to release: ");
+            push = console.next();
+            mainwindow.releaseKey(push);
+        }
+    }
 }

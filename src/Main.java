@@ -18,7 +18,7 @@ public class Main {
         mainWindow mainwindow = new mainWindow("Air Key Board", conrrector);
 //        mainwindow.showCenter(33);
 //        checkGesture(mainwindow);
-        checkChangeState(mainwindow);
+//        checkChangeState(mainwindow);
         // Create a sample listener and controller
         LeapMotionListener listener = new LeapMotionListener(mainwindow, conrrector);
         Controller controller = new Controller();

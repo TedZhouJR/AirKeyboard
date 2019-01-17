@@ -20,7 +20,7 @@ public class LeapMotionListener extends Listener {
     private static final int GESTURE_CD_MAX = 50;
     private int gestureCDCounter = 0;
     private double swipPosX = 0.0;
-    private boolean isGesturing = false, isDeleting = false;
+    private boolean isGesturing = false, isDeleting = false/*, isSwitching = false*/;
     private String recentClick = "";
     private String[] numberList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
     private static Vector rightDirection = new Vector(1, 0, 0), leftDirection = new Vector(-1, 0, 0),
@@ -111,8 +111,7 @@ public class LeapMotionListener extends Listener {
         boolean[] push = new boolean[fingerNum];
         int index = 0;
 
-
-        // 光标移动判断
+        //手势判断
         Vector leftIndexDirection = null;
         Vector leftPalmDirection = null, rightPalmDirection = null;
         Bone leftRefereeBone = null;
@@ -129,59 +128,74 @@ public class LeapMotionListener extends Listener {
                 rightPalmDirection = hand.palmNormal();
             }
         }
-        if (leftIndexDirection == null || leftPalmDirection == null) {
-            return;
-        }
-        if (leftPalmDirection.angleTo(rightDirection) < degree2rad(25) && leftPalmDirection.angleTo(leftIndexDirection) > degree2rad(70) &&
-                leftPalmDirection.angleTo(leftIndexDirection) < degree2rad(110) ) {
-            gestureCDCounter = 0;
-            float tmpSwipePosX = leftRefereeBone.nextJoint().getX();
-            double diffSwipePosX = tmpSwipePosX - swipPosX;
-            float x[] = {tmpSwipePosX};
-            mWindow.update(0, x, null, null, mainWindow.MOVECURSOR);
-            //左手竖直且张开
-            if (!isGesturing) {
-                swipPosX = leftRefereeBone.nextJoint().getX();
+
+        if (leftIndexDirection != null && leftPalmDirection == null) {
+//            // 切换键盘手势判断
+//            if (leftPalmDirection.angleTo(upDirection) < degree2rad(30)) {
+//                gestureCDCounter = 0;
+//                if (!isSwitching) {
+//                    isSwitching = true;
+//                    System.out.println("Switch Keyboard");
+//                }
+//            } else if (leftPalmDirection.angleTo(upDirection) > degree2rad(140)) {
+//                isSwitching = false;
+//            }
+//            if (isSwitching) {
+//                return;
+//            }
+
+            // 光标移动判断
+            if (leftPalmDirection.angleTo(rightDirection) < degree2rad(25) && leftPalmDirection.angleTo(leftIndexDirection) > degree2rad(70) &&
+                    leftPalmDirection.angleTo(leftIndexDirection) < degree2rad(110) ) {
+                gestureCDCounter = 0;
+                float tmpSwipePosX = leftRefereeBone.nextJoint().getX();
+                double diffSwipePosX = tmpSwipePosX - swipPosX;
+                float x[] = {tmpSwipePosX};
+                mWindow.update(0, x, null, null, mainWindow.MOVECURSOR);
+                //左手竖直且张开
+                if (!isGesturing) {
+                    swipPosX = leftRefereeBone.nextJoint().getX();
+                    isGesturing = true;
+                    return;
+                }
                 isGesturing = true;
+                if (diffSwipePosX > SWIP_UNIT) {
+                    //光标右移动
+                    mWindow.moveCursor(false);
+                    System.out.println("Move right a unit");
+                    swipPosX = tmpSwipePosX;
+                } else if (diffSwipePosX < -SWIP_UNIT) {
+                    //光标左移动
+                    mWindow.moveCursor(true);
+                    System.out.println("Move left a unit");
+                    swipPosX = tmpSwipePosX;
+                }
                 return;
             }
-            isGesturing = true;
-            if (diffSwipePosX > SWIP_UNIT) {
-                //光标右移动
-                mWindow.moveCursor(false);
-                System.out.println("Move right a unit");
-                swipPosX = tmpSwipePosX;
-            } else if (diffSwipePosX < -SWIP_UNIT) {
-                //光标左移动
-                mWindow.moveCursor(true);
-                System.out.println("Move left a unit");
-                swipPosX = tmpSwipePosX;
-            }
-            return;
         }
 
+
         //删除手势判断
-        if (rightPalmDirection == null) {
-            return;
-        }
-        if (rightPalmDirection.angleTo(upDirection) > degree2rad(65) && rightPalmDirection.angleTo(upDirection) < degree2rad(115)) {
-            //右手手掌方向在水平面内
-            float y[] = {rightPalmDirection.angleTo(leftDirection)};
-            mWindow.update(0, null, y, null, mainWindow.DELETE);
-            if (!isDeleting) {
-                if (rightPalmDirection.angleTo(leftDirection) < degree2rad(25)) {
-                    isDeleting = true;
-                    isGesturing = true;
+        if (rightPalmDirection != null) {
+            if (rightPalmDirection.angleTo(upDirection) > degree2rad(65) && rightPalmDirection.angleTo(upDirection) < degree2rad(115)) {
+                //右手手掌方向在水平面内
+                float y[] = {rightPalmDirection.angleTo(leftDirection)};
+                mWindow.update(0, null, y, null, mainWindow.DELETE);
+                if (!isDeleting) {
+                    if (rightPalmDirection.angleTo(leftDirection) < degree2rad(28)) {
+                        isDeleting = true;
+                        isGesturing = true;
+                    }
+                } else {
+                    if (rightPalmDirection.angleTo(inDirection) < degree2rad(35)) {
+                        //删除一个字母
+                        mWindow.backSpace();
+                        System.out.println("Delete");
+                        isDeleting = false;
+                    }
                 }
-            } else {
-                if (rightPalmDirection.angleTo(inDirection) < degree2rad(35)) {
-                    //删除一个字母
-                    mWindow.backSpace();
-                    System.out.println("Delete");
-                    isDeleting = false;
-                }
+                return;
             }
-            return;
         }
 
         isDeleting = false;
@@ -195,6 +209,7 @@ public class LeapMotionListener extends Listener {
                 return;
             }
         }
+
         for (Finger finger : frame.fingers()) {
             if (finger.type() == Finger.Type.TYPE_INDEX) {
                 Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);

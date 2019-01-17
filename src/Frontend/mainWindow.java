@@ -97,11 +97,11 @@ public class mainWindow extends JFrame{
 
     public void pushKey(String target, String[] words){
         keyPanel.pushKey(target.toUpperCase());
-        if(!target.toUpperCase().equals(KeyPanel.keynum[36].toUpperCase())) {
+        {
             int targetLen = target.length();
             if(targetLen == 1){
                 char first = target.charAt(0);
-                if((first >= '0') && (first <= '9')){
+                if((first >= '0') && (first <= '6')){
                     prefixWord = candidatePanel.chooseWord(Integer.parseInt(target));
                     textPanel.changeLastWord(prefixWord, inputWord);
                     inputWord = "";
@@ -113,11 +113,11 @@ public class mainWindow extends JFrame{
             candidatePanel.setWordlist(words);               // 显示候选单词
             // TODO: 如何轮回的显示输入字符，即一个键被一直按下之后应该怎样不间断输出。
         }
-        else {
-            // BackSpace operation
-            // TODO: 解决多次backspace后候选单词比显示单词少一位的情况
-            backSpace();
-        }
+//        else {
+//            // BackSpace operation
+//            // TODO: 解决多次backspace后候选单词比显示单词少一位的情况
+//            backSpace();
+//        }
     }
 
     public void releaseKey(String target){

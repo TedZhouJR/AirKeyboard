@@ -7,7 +7,8 @@ public class KeyPanel extends JPanel {
     private Key[] keys;
     public static final String[] keynum = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
                                           "A", "S", "D", "F", "G", "H", "J", "K", "L",
-                                          "?123", "Z", "X", "C", "V", "B", "N", "M"};
+                                          "?123", "Z", "X", "C", "V", "B", "N", "M",
+                                            "0", "1", "3", "4", "5", "6"};
     public static final String[] numberkey = {};
     //1000*300
     public static final float[] keyY = {50, 50, 50, 50, 50, 50,

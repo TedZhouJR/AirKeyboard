@@ -79,7 +79,9 @@ public class mainWindow extends JFrame{
                     // 然后将坐标中心从键盘中间平移到左上角，以正常显示
                     // TODO: 键盘可现实点的像素大小变为1000 × 400，键盘坐标应该如何改动？
                     Xs[i] = (int) (((X[i] + 135.0) / 270.0) * 1000);
-                    Ys[i] = (int) (((Y[i] + 50.0) / 100.0) * 300);
+                    Ys[i] = (int) (((Y[i] + 50.0) / 100.0) * 400);
+
+                    System.out.println("x : " + Xs[i] + ",y : " + Ys[i]);
                 }
                 glassPanel.update(num, Xs, Ys, push);
                 break;

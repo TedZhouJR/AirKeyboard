@@ -59,7 +59,8 @@ public class LeapMotionListener extends Listener {
     }
 
     private void calNearestNine(float pressX_in, float pressY_in) {   //返回距离最近的九个字母按键
-        float pressX = (pressX_in + 135) * 1000 / 270, pressY = (pressY_in + 50) * 300 / 100;
+        float pressX = (pressX_in + 135) * 1000 / 270, pressY = (pressY_in + 50) * 400 / 100;
+        System.out.println("x : " + pressX + ",y : " + pressY);
         String[] nearestNine = {"","","","","","","","",""};
         Map<String, Double> prob_dict = new HashMap<>();
         float[] distance = new float[9];
@@ -73,7 +74,11 @@ public class LeapMotionListener extends Listener {
                         distance[k] = distance[k - 1];
                     }
                     //再插进新的
-                    nearestNine[j] = KeyPanel.keynum[i];
+                    if (mWindow.keyBoardState == mainWindow.QWERTY) {
+                        nearestNine[j] = KeyPanel.keynum[i];
+                    } else {
+                        nearestNine[j] = KeyPanel.numberkey[i];
+                    }
                     distance[j] = tmp_distance;
                     break;
                 }

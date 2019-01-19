@@ -126,6 +126,21 @@ public class Corrector {
 		return x;
 	}
 
+	private int Counting(String ss){
+		int x =0;
+		for (Map.Entry<String, Double> entry : temp.entrySet()) {
+			if (entry.getKey().indexOf(ss) >=0 && entry.getKey().indexOf(ss) <=2) {
+				x++;
+				if (x > 3) {
+					collection1.clear();
+					break;
+				}
+				collection1.put(entry.getKey(), entry.getValue());
+			}
+		}
+		return x;
+	}
+
 	public String[] setList(Map<String, Double> arg, mainWindow mwin){
 		for (int d=1; d<10; d++) {
 			wordlist[d] = "";
@@ -134,6 +149,7 @@ public class Corrector {
 			wordlist[0] = getBigValue(arg).toLowerCase();
 			return wordlist;
 		}
+		Counting(mwin.inputWord + getBigValue(arg).toLowerCase());
 		String xc = mwin.prefixWord.toLowerCase();
 		int i = 0;
 		if (!arg.isEmpty()) {

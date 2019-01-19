@@ -134,7 +134,7 @@ public class LeapMotionListener extends Listener {
             }
         }
 
-        if (leftIndexDirection != null && leftPalmDirection == null) {
+        if (leftIndexDirection != null && leftPalmDirection != null) {
 //            // 切换键盘手势判断
 //            if (leftPalmDirection.angleTo(upDirection) < degree2rad(30)) {
 //                gestureCDCounter = 0;
@@ -152,6 +152,7 @@ public class LeapMotionListener extends Listener {
             // 光标移动判断
             if (leftPalmDirection.angleTo(rightDirection) < degree2rad(25) && leftPalmDirection.angleTo(leftIndexDirection) > degree2rad(70) &&
                     leftPalmDirection.angleTo(leftIndexDirection) < degree2rad(110) ) {
+                System.out.println("    left");
                 gestureCDCounter = 0;
                 float tmpSwipePosX = leftRefereeBone.nextJoint().getX();
                 double diffSwipePosX = tmpSwipePosX - swipPosX;

@@ -94,7 +94,7 @@ public class mainWindow extends JFrame{
             else{
                 String text = textPanel.getText();
                 String[] preWords = text.split(" +");
-                if(preWords.length > 2){
+                if(preWords.length >= 2){
                     inputWord = preWords[preWords.length - 1];
                     prefixWord = preWords[preWords.length - 2];
                 }
@@ -132,5 +132,34 @@ public class mainWindow extends JFrame{
         System.out.println(KeyPanel.keyY.length);
         glassPanel.update(37, centerX, centerY, new boolean[37]);
         glassPanel.repaint();
+    }
+
+    public void moveCursor(boolean isLeft){
+        String[] preWords = textPanel.moveCursor(isLeft);
+        if(preWords != null) {
+            String[] newwords = setInputWord(preWords);
+            if (newwords != null) {
+                candidatePanel.setWordlist(newwords);
+            }
+        }
+    }
+
+    private String[] setInputWord(String[] preWords){
+        if(preWords.length >= 2){
+            inputWord = preWords[preWords.length - 1];
+            prefixWord = preWords[preWords.length - 2];
+        }
+        else if(preWords.length == 1){
+            inputWord = preWords[0];
+            prefixWord = "";
+        }
+        else{
+            inputWord = "";
+            prefixWord = "";
+            candidatePanel.setWordlist(null);
+            return null;
+        }
+        Map<String, Double> prob_dict = new HashMap<>();
+        return corrector.setList(prob_dict, this);
     }
 }

@@ -16,8 +16,15 @@ public class LeapMotionListener extends Listener {
     private Map<Integer, Vector> mFingerPos;
     private static final double DESCEND_PERCENTAGE = 0.88, RISE_PERCENTAGE = 0.8, RISE_TIME = 3;
     private static final double DESCEND_DISTANCE = 2.5, RISE_DISTANCE = 0.0, DESCEND_TIME = 3;
+    private static final double SWIP_UNIT = 10.0;
+    private static final int GESTURE_CD_MAX = 50;
+    private int gestureCDCounter = 0;
+    private double swipPosX = 0.0;
+    private boolean isGesturing = false, isDeleting = false;
     private String recentClick = "";
     private String[] numberList = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+    private static Vector rightDirection = new Vector(1, 0, 0), leftDirection = new Vector(-1, 0, 0),
+            upDirection = new Vector(0, 1, 0), inDirection = new Vector(0, 0, 1);
 
     public LeapMotionListener(mainWindow mWindow, Corrector correctorIn) {
         this.mWindow = mWindow;
@@ -104,6 +111,86 @@ public class LeapMotionListener extends Listener {
         boolean[] push = new boolean[fingerNum];
         int index = 0;
 
+
+        // 光标移动判断
+        Vector leftIndexDirection = null;
+        Vector leftPalmDirection = null, rightPalmDirection = null;
+        Bone leftRefereeBone = null;
+        for (Hand hand : frame.hands()) {
+            if (hand.isLeft()) {   //左手
+                leftPalmDirection = hand.palmNormal();   //[x, y, z]
+                for (Finger finger : hand.fingers()) {
+                    if (finger.type() == Finger.Type.TYPE_INDEX) {
+                        leftRefereeBone = finger.bone(Bone.Type.TYPE_PROXIMAL);
+                        leftIndexDirection = leftRefereeBone.direction();  //[x, y, z]
+                    }
+                }
+            } else {
+                rightPalmDirection = hand.palmNormal();
+            }
+        }
+        if (leftIndexDirection == null || leftPalmDirection == null) {
+            return;
+        }
+        if (leftPalmDirection.angleTo(rightDirection) < degree2rad(25) && leftPalmDirection.angleTo(leftIndexDirection) > degree2rad(70) &&
+                leftPalmDirection.angleTo(leftIndexDirection) < degree2rad(110) ) {
+            gestureCDCounter = 0;
+            //左手竖直且张开
+            if (!isGesturing) {
+                swipPosX = leftRefereeBone.nextJoint().getX();
+                isGesturing = true;
+                return;
+            }
+            isGesturing = true;
+            double tmpSwipePosX = leftRefereeBone.nextJoint().getX();
+            double diffSwipePosX = tmpSwipePosX - swipPosX;
+            if (diffSwipePosX > SWIP_UNIT) {
+                //光标右移动
+                mWindow.moveCursor(false);
+                System.out.println("Move right a unit");
+                swipPosX = tmpSwipePosX;
+            } else if (diffSwipePosX < -SWIP_UNIT) {
+                //光标左移动
+                mWindow.moveCursor(true);
+                System.out.println("Move left a unit");
+                swipPosX = tmpSwipePosX;
+            }
+            return;
+        }
+
+        //删除手势判断
+        if (rightPalmDirection == null) {
+            return;
+        }
+        if (rightPalmDirection.angleTo(upDirection) > degree2rad(65) && rightPalmDirection.angleTo(upDirection) < degree2rad(115)) {
+            //右手手掌方向在水平面内
+            if (!isDeleting) {
+                if (rightPalmDirection.angleTo(leftDirection) < degree2rad(25)) {
+                    isDeleting = true;
+                    isGesturing = true;
+                }
+            } else {
+                if (rightPalmDirection.angleTo(inDirection) < degree2rad(35)) {
+                    //删除一个字母
+                    mWindow.pushKey("Backspace", null);
+                    System.out.println("Delete");
+                    isDeleting = false;
+                }
+            }
+            return;
+        }
+
+        isDeleting = false;
+        // gesture CD 判断
+        if (isGesturing || (gestureCDCounter < GESTURE_CD_MAX && gestureCDCounter >= 0)) {
+            isGesturing = false;
+            gestureCDCounter++;
+            if (gestureCDCounter == GESTURE_CD_MAX) {
+                gestureCDCounter = -1;
+            } else {
+                return;
+            }
+        }
         for (Finger finger : frame.fingers()) {
             if (finger.type() == Finger.Type.TYPE_INDEX) {
                 Bone bone = finger.bone(Bone.Type.TYPE_DISTAL);
@@ -187,5 +274,9 @@ public class LeapMotionListener extends Listener {
                 break;
             }
         }
+    }
+
+    private double degree2rad(double degree) {
+        return degree * Math.PI / 180.0;
     }
 }

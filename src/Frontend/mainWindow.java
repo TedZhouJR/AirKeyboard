@@ -98,7 +98,9 @@ public class mainWindow extends JFrame{
     }
 
     public void pushKey(String target, String[] words){
-        if(!target.equals(KeyPanel.keynum[19]) && !target.equals(KeyPanel.numberkey[19])) {
+        boolean test1 = target.equals(KeyPanel.keynum[19]) || target.equals(KeyPanel.numberkey[19]); // check change state
+        boolean test2 = target.equals(KeyPanel.keynum[27]);  // check clear
+        if(!test1 && !test2) {
             int targetLen = target.length();
             if(targetLen == 2){
                 char first = target.charAt(0);
@@ -116,11 +118,19 @@ public class mainWindow extends JFrame{
             candidatePanel.setWordlist(words);               // 显示候选单词
             // TODO: 如何轮回的显示输入字符，即一个键被一直按下之后应该怎样不间断输出。
         }
-        else {
+        else if(test1){
             // changeState operation
             // TODO: 解决多次backspace后候选单词比显示单词少一位的情况
             keyPanel.pushKey(target.toUpperCase());
             changeState(target);
+        }
+        else{
+            // clear operation
+            keyPanel.pushKey(target.toUpperCase());
+            int totalNum = textPanel.clearText();
+            System.out.printf("You have already input %d words!!!\n\n", totalNum);
+            inputWord = "";
+            prefixWord = "";
         }
     }
 

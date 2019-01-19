@@ -78,4 +78,12 @@ class TextPanel extends JPanel {
         String preText = area.getText().substring(0, pos);
         return preText.split(" +");
     }
+
+    int clearText(){
+        String text = area.getText();
+        String[] words = text.split(" +");
+        int totalNum = words.length;
+        area.setText("");
+        return totalNum;
+    }
 }

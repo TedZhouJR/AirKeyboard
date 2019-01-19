@@ -17,11 +17,11 @@ public class ContentPanel extends JComponent {
     ContentPanel(){
         super();
         fingerNum = 0;
-        fingerLocation = new Vector<>(33);   // show center DEBUG
-        for (int i = 0; i < 33; i++){
+        fingerLocation = new Vector<>(KeyPanel.KEYNUM + 6);   // show center DEBUG
+        for (int i = 0; i < KeyPanel.KEYNUM + 6; i++){
             fingerLocation.add(new Location(0, 0));
         }
-        push = new boolean[33];                          // show center DEBUG
+        push = new boolean[KeyPanel.KEYNUM + 6];                          // show center DEBUG
         this.gesture = -1;
         this.toDraw = null;
         this.angle = 0;

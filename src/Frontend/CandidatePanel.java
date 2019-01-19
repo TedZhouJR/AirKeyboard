@@ -22,17 +22,14 @@ public class CandidatePanel extends JPanel {
         //Color labelColor = new Color(63, 81, 98);
         this.add(Box.createRigidArea(new Dimension(45, 0)));
         for(int i = 0; i < 6; i++){
-            labelWord[i] = new Key("n" + i, 27 + i);
+            labelWord[i] = new Key("n" + i, KeyPanel.KEYNUM + i);
             labelWord[i].setText("");
             labelWord[i].setOpaque(true);
-            // labelWord[i].setHorizontalAlignment(SwingConstants.CENTER);
+            labelWord[i].setHorizontalAlignment(SwingConstants.CENTER);
             labelWord[i].setPreferredSize(wordSize);
             labelWord[i].setMaximumSize(wordSize);
             labelWord[i].setMinimumSize(wordSize);
             labelWord[i].setFont(wordFont);
-            // labelWord[i].setBackground(labelColor);
-            // System.out.printf("%d, %d, %d\n", Color.GRAY.getRed(), Color.GRAY.darker().getRed(), Color.DARK_GRAY.getRed());
-            // labelWord[i].setForeground(Color.WHITE);
             this.add(labelWord[i]);
             this.add(Box.createRigidArea(rigid));
         }
@@ -48,7 +45,6 @@ public class CandidatePanel extends JPanel {
             length = (words.length > 6) ? 6 : words.length;
             for (int i = 0; i < length; i++) {
                 wordlist.add(words[i]);
-                labelWord[i].setHorizontalAlignment(SwingConstants.CENTER);
                 labelWord[i].setText(words[i]);
             }
         }

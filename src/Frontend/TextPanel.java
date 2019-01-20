@@ -17,6 +17,7 @@ class TextPanel extends JPanel {
         area.setFont(areaFont);
         area.setBorder(BorderFactory.createLineBorder(areaColor));
         area.setForeground(Color.WHITE);
+        area.setCaretColor(Color.WHITE);
         JScrollPane areaScrollPane = new JScrollPane(area);
         areaScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

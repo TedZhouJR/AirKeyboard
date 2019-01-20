@@ -140,7 +140,7 @@ public class LeapMotionListener extends Listener {
                 gestureCDCounter = 0;
                 if (!isClearing) {
                     isClearing = true;
-                    System.out.println("Switch Keyboard");
+                    mWindow.clear();
                 }
             } else if (leftPalmDirection.angleTo(upDirection) > degree2rad(140)) {
                 isClearing = false;

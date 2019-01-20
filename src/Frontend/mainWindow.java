@@ -4,6 +4,7 @@ import Backend.Corrector;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class mainWindow extends JFrame{
@@ -97,6 +98,14 @@ public class mainWindow extends JFrame{
         glassPanel.repaint();
     }
 
+    public void clear() {
+        int totalNum = textPanel.clearText();
+        System.out.printf("You have already input %d words!!!\n\n", totalNum);
+        inputWord = "";
+        prefixWord = "";
+        candidatePanel.setWordlist(null);
+    }
+
     public void pushKey(String target, String[] words){
         boolean test1 = target.equals(KeyPanel.keynum[19]) || target.equals(KeyPanel.numberkey[19]); // check change state
         boolean test2 = target.equals(KeyPanel.keynum[27]);  // check clear
@@ -127,10 +136,7 @@ public class mainWindow extends JFrame{
         else{
             // clear operation
             keyPanel.pushKey(target.toUpperCase());
-            int totalNum = textPanel.clearText();
-            System.out.printf("You have already input %d words!!!\n\n", totalNum);
-            inputWord = "";
-            prefixWord = "";
+            clear();
         }
     }
 

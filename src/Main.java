@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args){
         Corrector conrrector = new Corrector();
         mainWindow mainwindow = new mainWindow("Air Key Board", conrrector);
-//        mainwindow.showCenter(33);
+//        mainwindow.showCenter(34);
 //        checkGesture(mainwindow);
 //        checkChangeState(mainwindow);
         // Create a sample listener and controller

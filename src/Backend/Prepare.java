@@ -55,10 +55,10 @@ public class Prepare {
 	public static void main(String[] args) {
 		map.put("map1",0.0);
 		map2.put("map2",0.0);
-		dealWith("src2.txt");
-		dealWith("src1.txt");
+		dealWith("dictionary/src2.txt");
+		dealWith("dictionary/src1.txt");
 		try {
-			FileOutputStream fos=new FileOutputStream("dst.txt");
+			FileOutputStream fos=new FileOutputStream("dictionary/dst.txt");
 	        ObjectOutputStream objectOutputStream=new ObjectOutputStream(fos);
 	        objectOutputStream.writeObject(map);
 	        objectOutputStream.close();
@@ -67,7 +67,7 @@ public class Prepare {
 			e.printStackTrace();
 		}
 		try {
-			FileOutputStream fos2=new FileOutputStream("dst2.txt");
+			FileOutputStream fos2=new FileOutputStream("dictionary/dst2.txt");
 			ObjectOutputStream objectOutputStream2=new ObjectOutputStream(fos2);
 			objectOutputStream2.writeObject(map2);
 			objectOutputStream2.close();

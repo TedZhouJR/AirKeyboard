@@ -13,7 +13,7 @@ public class Corrector {
 	private String[] wordlist = new String[10];
 	public Corrector() {
 		try {
-			FileInputStream f=new FileInputStream("dst.txt");
+			FileInputStream f=new FileInputStream("dictionary/dst.txt");
 			ObjectInputStream ob=new ObjectInputStream(f);
 			temp = (Map<String, Double>) ob.readObject();
 			//System.out.println(temp.get("you"));
@@ -23,7 +23,7 @@ public class Corrector {
 			e.printStackTrace();
 		}
 		try {
-			FileInputStream f2=new FileInputStream("dst2.txt");
+			FileInputStream f2=new FileInputStream("dictionary/dst2.txt");
 			ObjectInputStream ob2=new ObjectInputStream(f2);
 			temp2 = (Map<String, Double>) ob2.readObject();
 			//System.out.println(temp.get("you"));
